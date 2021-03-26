@@ -20,7 +20,10 @@ declare module 'chartiq/js/componentUI' {
 
 	export namespace CIQ.UI {
 		interface Context {
-			stx: CIQ.ChartEngine
+			stx: CIQ.ChartEngine,
+			config: any,
+			getAdvertised(name: string): any,
+			topNode: HTMLElement
 		}
 	}
 }

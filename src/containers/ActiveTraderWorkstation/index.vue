@@ -434,7 +434,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Provide, Ref, Vue } from 'vue-property-decorator'
+import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
 // @ts-ignore
 import { CIQ } from 'chartiq/js/componentUI'
 import { getConfig } from './resources' // ChartIQ library resources
@@ -450,14 +450,11 @@ export default class ActiveTraderComponent extends Vue {
 	@Prop({ type: String, default: '_custom-chart' }) chartId!: string
 	@Prop({ type: Function, default: ({}) => {} }) chartInitialized!: Function
 
-	@Provide() state = {
-		chart: new CIQ.UI.Chart(),
-		stx: null,
-		UIContext: null,
-		chartInitializedCallback: this.chartInitialized
-	} as { [x: string]: any }
-
 	@Ref('container') container!: HTMLElement
+
+	stx: CIQ.ChartEngine | undefined
+	uiContext: CIQ.UI.Context | undefined
+	moneyFlowChart: CIQ.Visualization | undefined
 
 	mounted() {
 		let config = this.config
@@ -503,28 +500,25 @@ export default class ActiveTraderComponent extends Vue {
 
 			// Request TFC channel open
 			channelWrite(config.channels.tfc, true, uiContext.stx)
+			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
 		}, 0)
 	}
 
 	beforeDestroy() {
 		// Destroy the ChartEngine instance when unloading the component.
 		// This will stop internal processes such as quotefeed polling.
-		this.state.stx.moneyFlowChart.destroy()
-		this.state.stx.destroy()
+		if (this.moneyFlowChart) this.moneyFlowChart.destroy(false)
+		this.stx?.destroy()
 	}
 
 	async createChartAndUI(config: any) {
+		const chart = new CIQ.UI.Chart()
 		const container = this.container
 
-		// Prior to UI creation disable breakpoint setter to manage breakpoint setting using Angular tools.
-		// This is not required and is used just as an integration example
-		this.state.chart.breakpointSetter = () => (/* value: any */) => {
-			// console.log('breakpoint value', value);
-		}
-		const uiContext = this.state.chart.createChartAndUI({ container, config })
+		const uiContext = chart.createChartAndUI({ container, config })
 
-		this.state.stx = uiContext.stx
-		this.state.uiContext = uiContext
+		this.stx = uiContext.stx
+		this.uiContext = uiContext
 
 		// Channel subscribe
 		// const { channels } = config
@@ -562,7 +556,7 @@ export default class ActiveTraderComponent extends Vue {
 	}
 
 	setUpMoneyFlowChart(stx: any) {
-		stx.moneyFlowChart = moneyFlowChart(stx)
+		this.moneyFlowChart = moneyFlowChart(stx)
 
 		function moneyFlowChart(stx: any) {
 			const initialPieData = {

@@ -13,8 +13,6 @@ import { getCustomConfig } from './resources' // ChartIQ library resources
 // @ts-ignore
 import { CIQ } from 'chartiq/js/componentUI' // Required for types in chartInitialized
 
-const exampleFeedback = true // set example feedback to see console log
-
 @Component({
 	components: {
 		AdvancedChartComponent
@@ -37,35 +35,34 @@ export default class AdvancedWrapper extends Vue {
 	}
 
 	chartInitialized({
+		/* eslint-disable */
 		chartEngine,
 		uiContext,
 		config
+		/* esllint-enable */
 	}: {
 		chartEngine: CIQ.ChartEngine
 		uiContext: CIQ.UI.Context
 		config: any
 	}) {
 		// Methods for capturing state changes in chart engine and UI
-		if (exampleFeedback) {
-			// Channel subscribe
-			const { channels } = config
-			const channelSubscribe = CIQ.UI.BaseComponent.prototype.channelSubscribe
-			channelSubscribe(
-				channels.breakpoint,
-				(value: any) => {
-					console.log('channels.breakpoint', value)
-				},
-				chartEngine
-			)
-
-			// Create layout listener, see parameters at https://documentation.chartiq.com/global.html#layoutEventListener
-			uiContext.stx.addEventListener('layout', ({ layout }: any) => {
-				console.log('layout changed', layout)
-			})
-		}
+		// 	Channel subscribe example to listen to breakpoint changes
+		// 	const { channels } = config
+		// 	const channelSubscribe = CIQ.UI.BaseComponent.prototype.channelSubscribe
+		// 	channelSubscribe(
+		// 		channels.breakpoint,
+		// 		(value: any) => {
+		// 			console.log('channels.breakpoint', value)
+		// 		},
+		// 		chartEngine
+		// 	)
+		// Layout listener example, see parameters at https://documentation.chartiq.com/global.html#layoutEventListener
+		// uiContext.stx.addEventListener('layout', ({ layout }: any) => {
+		// 	console.log('layout changed', layout)
+		// })
 		// Simulate L2 data using https://documentation.chartiq.com/CIQ.ChartEngine.html#updateCurrentMarketData
 		// Requires import 'chartiq/examples/feeds/L2_simulator'
-		// CIQ.simulateL2({ stx: this.state.stx, onInterval: 1000, onTrade: true })
+		// CIQ.simulateL2({ stx: chartEngine, onInterval: 1000, onTrade: true })
 	}
 }
 </script>

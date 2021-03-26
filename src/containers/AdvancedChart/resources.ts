@@ -108,20 +108,22 @@ function getCustomConfig({
 	config.onChartReady = onChartReady
 
 	// Select only plugin configurations that needs to be active for this chart
-	// const {
-	// 	marketDepth,
-	// 	termStructure,
-	// 	tfc,
-	// 	timeSpanEventPanel,
-	// 	visualEarnings
-	// } = config.plugins
-	// config.plugins = {
-	// 	// marketDepth,
-	// 	// termStructure,
-	// 	// tfc,
-	// 	// timeSpanEventPanel,
-	// 	// visualEarnings
-	// }
+	const {
+		/* eslint-disable */
+		marketDepth,
+		termStructure,
+		tfc,
+		timeSpanEventPanel,
+		visualEarnings
+		/* eslint-enable */
+	} = config.plugins
+	config.plugins = {
+		// marketDepth,
+		// termStructure,
+		// tfc,
+		// timeSpanEventPanel,
+		// visualEarnings
+	}
 
 	// Enable / disable addOns
 	// config.enabledAddOns.tooltip = false;

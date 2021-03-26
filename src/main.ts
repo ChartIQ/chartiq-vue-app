@@ -1,7 +1,7 @@
 /**
  * The following are two implementations of charting applications. The first one includes several examples of
- * different types of chart components and it meant to showcase features of the ChartIQ library. It is using routing and will
- * require server support for browser history based routing.
+ * different types of chart components and is meant to showcase features of the ChartIQ library. It is using routing and will
+ * require server support for browser history–based routing.
  *
  * The second one (commented out) is an example of an application based on a single "Advanced Chart" template.
  */

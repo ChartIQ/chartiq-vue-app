@@ -42,7 +42,7 @@ import getDefaultConfig from 'chartiq/js/defaultConfiguration'
 // Plugins
 
 // Crypto, L2 Heat Map, Market Depth,
-import 'chartiq/plugins/activetrader/cryptoiq'
+// import 'chartiq/plugins/activetrader/cryptoiq'
 
 // ScriptIQ
 // import 'chartiq/plugins/scriptiq/scriptiq'
@@ -74,6 +74,7 @@ function getConfig() {
 		markerSample: marker.MarkersSample,
 		scrollStyle: PerfectScrollbar
 	})
+
 	return config
 }
 

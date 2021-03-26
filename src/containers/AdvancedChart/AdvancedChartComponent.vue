@@ -362,7 +362,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Provide, Ref, Vue } from 'vue-property-decorator'
+import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
 // @ts-ignore
 import { CIQ } from 'chartiq/js/componentUI'
 import { getCustomConfig } from './resources' // ChartIQ library resources
@@ -372,13 +372,9 @@ export default class AdvancedChartComponent extends Vue {
 	@Prop() config: any
 	@Prop({ type: Function, default: ({}) => {} }) chartInitialized!: Function
 
-	@Provide() state = {
-		chart: new CIQ.UI.Chart(),
-		stx: null,
-		UIContext: null
-	} as { [x: string]: any }
-
 	@Ref('container') container!: HTMLElement
+
+	stx: CIQ.ChartEngine | undefined
 
 	mounted() {
 		const config = this.config || getCustomConfig()
@@ -389,26 +385,22 @@ export default class AdvancedChartComponent extends Vue {
 		// have a chance to call portalizeContextDialogs
 		window.setTimeout(() => {
 			const uiContext = this.createChartAndUI(config)
-			const chartEngine = uiContext.stx
+			this.stx = uiContext.stx
 
-			this.state.stx = chartEngine
-			this.state.UIContext = uiContext
-
-			this.chartInitialized({ chartEngine, uiContext, config })
+			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
 		}, 0)
 	}
 
 	beforeDestroy() {
 		// Destroy the ChartEngine instance when unloading the component.
 		// This will stop internal processes such as quotefeed polling.
-		// @ ts-ignore
-		this.state.stx.destroy()
+		this.stx?.destroy()
 	}
 
 	createChartAndUI(config: any) {
 		const container = this.container
-
-		const uiContext = this.state.chart.createChartAndUI({ container, config })
+		const chart = new CIQ.UI.Chart()
+		const uiContext = chart.createChartAndUI({ container, config })
 
 		return uiContext
 	}

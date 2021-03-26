@@ -393,14 +393,6 @@ import { getConfig } from './resources' // ChartIQ library resources
 import RecentSymbolsComponent from './RecentSymbols.vue'
 import ShortcutDialogComponent from './ShortcutDialog.vue'
 
-type SymbolObj = string | { symbol: string; name: string; exchDisp: string }
-
-const initialSymbol: SymbolObj = {
-	symbol: 'APPL',
-	name: 'Apple Inc',
-	exchDisp: 'NASDAQ'
-}
-
 @Component({
 	components: {
 		RecentSymbolsComponent,
@@ -413,18 +405,8 @@ export default class CustomChartComponent extends Vue {
 	@Prop({ type: String, default: '_custom-chart' }) chartId!: string
 	@Prop({ type: Function, default: ({}) => {} }) chartInitialized!: Function
 
-	@Provide() state = {
-		chart: new CIQ.UI.Chart(),
-		stx: null,
-		UIContext: null,
-		chartInitializedCallback: this.chartInitialized
-	} as { [x: string]: any }
-
 	@Ref('container') container!: HTMLElement
 
-	private store = new CIQ.NameValueStore()
-	private symbolStorageName = 'recentSymbols'
-	private shortcutStorageName = 'customDrawingToolShortcuts'
 	@Provide() dialog = ''
 	drawingToolDetails = {
 		elliottwave: `
@@ -432,16 +414,38 @@ export default class CustomChartComponent extends Vue {
     `.trim()
 	}
 
-	mounted() {
-		CIQ.dialog = false
+	stx: CIQ.ChartEngine | undefined
+	uiContext: CIQ.UI.Context | undefined
+	private store = new CIQ.NameValueStore()
+	private symbolStorageName = 'recentSymbols'
+	private shortcutStorageName = 'customDrawingToolShortcuts'
 
+	mounted() {
 		const config = this.config
 		config.chartId = this.chartId
-		config.initialSymbol = this.symbol || initialSymbol
+		config.initialSymbol = this.symbol || {
+			symbol: 'APPL',
+			name: 'Apple Inc',
+			exchDisp: 'NASDAQ'
+		}
 
-		// Remove forecasting addOn not used here
-		delete config.addOns.plotComplementer
-		delete config.addOns.forecasting
+		// Select only plugin configurations that needs to be active for this chart
+		const {
+			/* eslint-disable */
+			marketDepth,
+			termStructure,
+			tfc,
+			timeSpanEventPanel,
+			visualEarnings
+			/* eslint-enable */
+		} = config.plugins
+		config.plugins = {
+			// marketDepth,
+			// termStructure,
+			// tfc,
+			// timeSpanEventPanel,
+			// visualEarnings
+		}
 
 		// Delay the call to createChartAndUI so any other AdvancedChart components on the page
 		// have a chance to call portalizeContextDialogs
@@ -453,17 +457,19 @@ export default class CustomChartComponent extends Vue {
 	beforeDestroy() {
 		// Destroy the ChartEngine instance when unloading the component.
 		// This will stop internal processes such as quotefeed polling.
-		this.state.stx.destroy()
+		this.stx?.destroy()
 	}
 
 	async createChartAndUI(config: any) {
+		const chart = new CIQ.UI.Chart()
 		const container = this.container
 
-		this.state.UIContext = this.state.chart.createChartAndUI({
+		const uiContext = chart.createChartAndUI({
 			container,
 			config
 		})
-		this.state.stx = this.state.UIContext.stx
+		this.uiContext = uiContext
+		this.stx = uiContext.stx
 
 		await this.updateCustomization(config)
 
@@ -475,7 +481,7 @@ export default class CustomChartComponent extends Vue {
 		portalizeContextDialogs(container)
 
 		const isForecasting = (symbol: string) => /_fcst$/.test(symbol)
-		this.state.stx.addEventListener(
+		this.stx?.addEventListener(
 			'symbolChange',
 			({ symbol, symbolObject, action }: { [x: string]: any }) => {
 				if (
@@ -544,7 +550,7 @@ export default class CustomChartComponent extends Vue {
 	}
 
 	addPreferencesHelper() {
-		const layoutHelper = this.state.UIContext.getAdvertised('Layout')
+		const layoutHelper = this.uiContext?.getAdvertised('Layout')
 		layoutHelper.openPreferences = (node: any, type: any) =>
 			this.openDialog(type)
 	}
@@ -557,7 +563,7 @@ export default class CustomChartComponent extends Vue {
 	}[] {
 		const { drawingToolDetails: details } = this
 
-		return this.state.UIContext.config.drawingTools.map(
+		return this.uiContext?.config.drawingTools.map(
 			({ label, shortcut, tool }: { [x: string]: any }) => {
 				return {
 					label,
@@ -571,7 +577,8 @@ export default class CustomChartComponent extends Vue {
 	}
 
 	@Provide() setDrawingToolShortcuts(shortcuts: any) {
-		const { config, topNode } = this.state.UIContext
+		if (!this.uiContext) return;
+		const { config, topNode } = this.uiContext
 
 		config.drawingTools.forEach((item: any) => {
 			item.shortcut = shortcuts[item.tool]

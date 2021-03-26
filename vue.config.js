@@ -4,6 +4,7 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = {
+	publicPath: "",
 	chainWebpack: config => {
 		config.plugin('copy').tap(args => {
 			args[0].push({
