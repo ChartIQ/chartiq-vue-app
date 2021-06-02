@@ -98,11 +98,11 @@ function getCustomConfig({
 	// Update chart configuration by modifying default configuration
 	config.chartId = chartId || '_advanced-chart'
 	config.initialSymbol = symbol || {
-		symbol: 'APPL',
+		symbol: 'AAPL',
 		name: 'Apple Inc',
 		exchDisp: 'NASDAQ'
 	}
-	config.restore = restore
+	if (typeof restore == 'boolean') config.restore = restore
 
 	// config.quoteFeeds[0].behavior.refreshInterval = 0; // disables quotefeed refresh
 	config.onChartReady = onChartReady

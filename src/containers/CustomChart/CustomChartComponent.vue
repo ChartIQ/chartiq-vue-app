@@ -17,7 +17,6 @@
 				<RecentSymbolsComponent :getRecentSymbols="getRecentSymbols">
 					<cq-lookup
 						cq-keystroke-claim
-						cq-keystroke-default
 						cq-uppercase
 					></cq-lookup>
 				</RecentSymbolsComponent>
@@ -125,7 +124,7 @@
 										</template-placeholder>
 									</cq-study-legend-content>
 									<cq-placeholder>
-										<div stxtap="Layout.clearStudies()" class="ciq-btn sm">
+										<div stxtap="Layout.clearStudies()" class="ciq-btn sm" keyboard-selectable="true">
 											Clear All
 										</div>
 									</cq-placeholder>
@@ -424,7 +423,7 @@ export default class CustomChartComponent extends Vue {
 		const config = this.config
 		config.chartId = this.chartId
 		config.initialSymbol = this.symbol || {
-			symbol: 'APPL',
+			symbol: 'AAPL',
 			name: 'Apple Inc',
 			exchDisp: 'NASDAQ'
 		}

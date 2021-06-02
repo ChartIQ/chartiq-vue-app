@@ -17,7 +17,6 @@
 			<cq-menu class="ciq-search">
 				<cq-lookup
 					cq-keystroke-claim
-					cq-keystroke-default
 					cq-uppercase
 				></cq-lookup>
 			</cq-menu>
@@ -123,7 +122,7 @@
 										</template-placeholder>
 									</cq-study-legend-content>
 									<cq-placeholder>
-										<div stxtap="Layout.clearStudies()" class="ciq-btn sm">
+										<div stxtap="Layout.clearStudies()" class="ciq-btn sm" keyboard-selectable="true">
 											Clear All
 										</div>
 									</cq-placeholder>
