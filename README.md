@@ -1,11 +1,5 @@
 # ChartIQ Vue Application
 
-<table>
-  <tr>
-    <td>:construction: <b>BETA Release</b>. Please visit us again starting May 15, 2021 to download the final release of this project.</td>
-  </tr>
-</table>
-
 ## Contents
 
 - [Overview](#overview)
