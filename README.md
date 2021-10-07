@@ -27,7 +27,7 @@ The ChartIQ Vue application is a toolkit of components that enable you to build 
 
 ## Requirements
 
-A copy of the ChartIQ library, version 8.2.0 or later.
+A copy of the ChartIQ library, version 8.2.x to 8.3.x.
 
 If you do not have a copy of the library, please contact your account manager or send an email to <info@cosaic.io>.
 
