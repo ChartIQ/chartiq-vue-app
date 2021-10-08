@@ -9,6 +9,7 @@
 		"lint": "vue-cli-service lint"
 	},
 	"dependencies": {
+		"@open-wc/webpack-import-meta-loader": "^0.4.7",
 		"babel-eslint": "^10.1.0",
 		"core-js": "^3.6.5",
 		"standard": "^16.0.3",

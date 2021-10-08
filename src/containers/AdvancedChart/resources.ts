@@ -26,6 +26,8 @@ import 'chartiq/examples/markers/videoSample'
 
 import 'chartiq/js/extras/svgcharts/piechart.js'
 
+// import 'chartiq/examples/help/helpContent.js'
+
 // @ts-ignore
 import quoteFeed from 'chartiq/examples/feeds/quoteFeedSimulator.js'
 

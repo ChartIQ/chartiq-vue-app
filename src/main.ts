@@ -12,7 +12,7 @@ import AppAllTemplates from './App.vue'
 
 Vue.config.productionTip = false
 
-Vue.config.ignoredElements = [/^cq-.*$/]
+Vue.config.ignoredElements = [/^cq-.*$/, /^stx-.*$/]
 
 // Workaround to be able to use the HTML template element in Vue template
 Vue.component('template-placeholder', {

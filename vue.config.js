@@ -5,6 +5,17 @@ const path = require('path')
 
 module.exports = {
 	publicPath: "",
+	configureWebpack: {
+		module: {
+			rules: [
+				/* import.meta support for webpack 4 */
+				{
+					test: /\.js$/,
+					loader: require.resolve('@open-wc/webpack-import-meta-loader')
+				}
+			]
+		}
+	},
 	chainWebpack: config => {
 		config.plugin('copy').tap(args => {
 			args[0].push({

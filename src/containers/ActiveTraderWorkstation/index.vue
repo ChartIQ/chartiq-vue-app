@@ -1,5 +1,7 @@
 <template>
 	<cq-context ref="container">
+		<cq-color-picker></cq-color-picker>
+
 		<div class="ciq-nav full-screen-hide">
 			<div class="sidenav-toggle ciq-toggles">
 				<cq-toggle
@@ -15,17 +17,14 @@
 			</div>
 
 			<cq-menu class="ciq-search">
-				<cq-lookup
-					cq-keystroke-claim
-					cq-uppercase
-				></cq-lookup>
+				<cq-lookup cq-keystroke-claim cq-uppercase></cq-lookup>
 			</cq-menu>
 
 			<cq-side-nav cq-on="sidenavOn">
 				<div class="icon-toggles ciq-toggles">
 					<cq-toggle class="ciq-draw" cq-member="drawing">
-						<span></span>
-						<cq-tooltip>Draw</cq-tooltip>
+						<cq-help help-id="drawing_tools_toggle"></cq-help>
+						<span></span><cq-tooltip>Draw</cq-tooltip>
 					</cq-toggle>
 					<cq-info-toggle-dropdown>
 						<cq-toggle class="ciq-CH" cq-member="crosshair">
@@ -67,7 +66,7 @@
 							</cq-menu-dropdown>
 						</cq-menu>
 					</cq-info-toggle-dropdown>
-					<cq-toggle class="ciq-DT" cq-member="tableView">
+					<cq-toggle class="ciq-DT tableview-ui" cq-member="tableView">
 						<span></span>
 						<cq-tooltip>Table View</cq-tooltip>
 					</cq-toggle>
@@ -122,7 +121,11 @@
 										</template-placeholder>
 									</cq-study-legend-content>
 									<cq-placeholder>
-										<div stxtap="Layout.clearStudies()" class="ciq-btn sm" keyboard-selectable="true">
+										<div
+											stxtap="Layout.clearStudies()"
+											class="ciq-btn sm"
+											keyboard-selectable="true"
+										>
 											Clear All
 										</div>
 									</cq-placeholder>
@@ -141,7 +144,7 @@
 								<cq-scriptiq-menu></cq-scriptiq-menu>
 								<cq-separator></cq-separator>
 							</div>
-							<cq-heading cq-filter cq-filter-min="-1"> Studies </cq-heading>
+							<cq-heading cq-filter cq-filter-min="15"> Studies </cq-heading>
 							<cq-studies></cq-studies>
 						</cq-menu-dropdown>
 					</cq-menu>
@@ -247,6 +250,11 @@
 								></cq-menu-container>
 								<cq-separator></cq-separator>
 							</cq-menu-dropdown-section>
+							<cq-menu-dropdown-section class="chart-addons">
+								<cq-heading>Additional Features</cq-heading>
+								<cq-menu-container cq-name="menuAddOns"></cq-menu-container>
+								<cq-separator></cq-separator>
+							</cq-menu-dropdown-section>
 							<cq-menu-dropdown-section class="chart-theme">
 								<cq-heading>Themes</cq-heading>
 								<cq-themes></cq-themes>
@@ -254,25 +262,18 @@
 							</cq-menu-dropdown-section>
 							<cq-menu-dropdown-section class="chart-locale">
 								<cq-heading>Locale</cq-heading>
-								<cq-item>
-									<cq-clickable
+								<cq-item keyboard-selectable="false"
+									><cq-clickable
 										cq-selector="cq-timezone-dialog"
 										cq-method="open"
-									>
-										Change Timezone
-									</cq-clickable>
-								</cq-item>
+										keyboard-selectable="true"
+										>Change Timezone</cq-clickable
+									></cq-item
+								>
 								<cq-item stxsetget="Layout.Language()">
 									<cq-flag></cq-flag>
 									<cq-language-name>Change Language</cq-language-name>
 								</cq-item>
-							</cq-menu-dropdown-section>
-							<cq-menu-dropdown-section class="shortcuts-ui">
-								<cq-separator></cq-separator>
-								<cq-heading>Shortcuts</cq-heading>
-								<cq-item stxtap="Layout.showShortcuts(true)"
-									>Shortcuts / Hotkeys</cq-item
-								>
 							</cq-menu-dropdown-section>
 						</cq-menu-dropdown>
 					</cq-menu>
@@ -395,6 +396,20 @@
 							</cq-palette-dock>
 
 							<div class="chartContainer">
+								<!-- stx-hu-tooltip is required only if addon tooltip is used and customization is required -->
+								<stx-hu-tooltip>
+									<stx-hu-tooltip-field field="DT">
+										<stx-hu-tooltip-field-name
+											>Date/Time</stx-hu-tooltip-field-name
+										>
+										<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
+									</stx-hu-tooltip-field>
+									<stx-hu-tooltip-field field="Close">
+										<stx-hu-tooltip-field-name></stx-hu-tooltip-field-name>
+										<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
+									</stx-hu-tooltip-field>
+								</stx-hu-tooltip>
+
 								<cq-chart-title cq-marker cq-browser-tab></cq-chart-title>
 
 								<cq-comparison-lookup></cq-comparison-lookup>
@@ -413,12 +428,17 @@
 			<div
 				class="shortcuts-ui ciq-shortcut-button"
 				stxtap="Layout.showShortcuts()"
-				title="Toggle shortcut legend"
+				title="Toggle Shortcut Legend"
+			></div>
+			<div
+				class="help-ui ciq-help-button"
+				stxtap="Layout.toggleHelp()"
+				title="Toggle Interactive Help"
 			></div>
 			<cq-show-range></cq-show-range>
 		</div>
 
-		<div class="cq-context-dialog">
+		<cq-dialogs>
 			<cq-dialog>
 				<cq-drawing-context></cq-drawing-context>
 			</cq-dialog>
@@ -426,7 +446,7 @@
 			<cq-dialog>
 				<cq-study-context></cq-study-context>
 			</cq-dialog>
-		</div>
+		</cq-dialogs>
 
 		<cq-side-panel></cq-side-panel>
 	</cq-context>
