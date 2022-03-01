@@ -1,6 +1,6 @@
 {
 	"name": "chartiq-vue-app",
-	"version": "0.1.0",
+	"version": "8.6.0",
 	"private": true,
 	"scripts": {
 		"start": "vue-cli-service serve",

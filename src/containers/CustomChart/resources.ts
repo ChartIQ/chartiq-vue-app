@@ -49,6 +49,10 @@ import getDefaultConfig from 'chartiq/js/defaultConfiguration'
 // ScriptIQ
 // import 'chartiq/plugins/scriptiq/scriptiq'
 
+// SignalIQ
+import 'chartiq/plugins/signaliq/signaliqDialog.js'
+import 'chartiq/plugins/signaliq/signaliq-marker.js'
+
 // Trading Central: Technical Insights
 // import 'chartiq/plugins/technicalinsights/components'
 

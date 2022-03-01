@@ -27,3 +27,10 @@ pnpm-debug.log*
 *.sln
 *.sw?
 *~
+
+#Ignore stx folder
+stx
+
+#Ignore allure reports
+allure-report
+allure-results

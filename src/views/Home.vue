@@ -3,8 +3,9 @@
 		<h2>ChartIQ Vue Application</h2>
 
 		<p class="description">
-			The chartiq-vue-app project is a toolkit of Vue components that you can use to create
-			complete charting applications. (Select the application names below to see examples.)
+			The chartiq-vue-app project is a toolkit of Vue components that you can
+			use to create complete charting applications. (Select the application
+			names below to see examples.)
 		</p>
 
 		<ul class="top-level">
@@ -13,8 +14,9 @@
 					<router-link to="/technical-analysis">Advanced Chart</router-link>
 				</h3>
 				<p>
-					A full-featured chart with an extensive user interface. Advanced Chart is the
-					equivalent of ChartIQ's <i>technical-analysis-chart.html</i> advanced template.
+					A full-featured chart with an extensive user interface. Advanced Chart
+					is the equivalent of ChartIQ's
+					<i>technical-analysis-chart.html</i> advanced template.
 				</p>
 			</li>
 			<li>
@@ -36,10 +38,11 @@
 				<p
 					v-if="ActiveTraderWorkstationEnabled === false"
 					class="disabled-link"
-					style="font-size: 0.70rem; margin-top: 0; margin-bottom: 0.70rem">
+					style="font-size: 0.70rem; margin-top: 0; margin-bottom: 0.70rem"
+				>
 					(To enable this link, uncomment all lines following the
-						<code>// Enable ActiveTraderWorkstation</code> comment in the
-						<i>router/index.ts</i> file.)
+					<code>// Enable ActiveTraderWorkstation</code> comment in the
+					<i>router/index.ts</i> file.)
 				</p>
 				<h3 v-if="ActiveTraderWorkstationEnabled === true">
 					<router-link to="/active-trader">Active Trader</router-link>
@@ -65,8 +68,8 @@
 					<router-link to="/hello-world">Hello World</router-link>
 				</h3>
 				<p>
-					A basic chart with no user interface. A great starting point for using the
-					ChartIQ API in Vue.
+					A basic chart with no user interface. A great starting point for using
+					the ChartIQ API in Vue.
 				</p>
 			</li>
 		</ul>

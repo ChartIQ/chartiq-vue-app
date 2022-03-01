@@ -4,8 +4,8 @@
 			<h2>Custom chart</h2>
 
 			<div>
-				...is a customization of the Advanced Chart component template, featuring
-				the addition of:
+				...is a customization of the Advanced Chart component template,
+				featuring the addition of:
 				<ul>
 					<li>
 						A native Vue component that enhances the ChartIQ symbol lookup web

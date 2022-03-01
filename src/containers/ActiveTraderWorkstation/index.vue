@@ -75,6 +75,30 @@
 
 			<div class="ciq-menu-section">
 				<div class="ciq-dropdowns">
+					<cq-menu class="ciq-menu ciq-display collapse">
+						<cq-clickable
+							cq-tooltip-activator
+							stxbind="Layout.chartType"
+							ciq-no-icon-text="Display"
+						>
+							<span ciq-menu-icon="true"></span>
+							<cq-tooltip></cq-tooltip>
+						</cq-clickable>
+						<cq-menu-dropdown>
+							<cq-menu-dropdown-section class="chart-types">
+								<cq-heading>Chart Types</cq-heading>
+								<cq-menu-container cq-name="menuChartStyle"></cq-menu-container>
+							</cq-menu-dropdown-section>
+							<cq-menu-dropdown-section class="chart-aggregations">
+								<cq-separator></cq-separator>
+								<cq-heading>Aggregated Types</cq-heading>
+								<cq-menu-container
+									cq-name="menuChartAggregates"
+								></cq-menu-container>
+							</cq-menu-dropdown-section>
+						</cq-menu-dropdown>
+					</cq-menu>
+
 					<cq-menu class="ciq-menu ciq-period">
 						<span>
 							<cq-clickable stxbind="Layout.periodicity">1D</cq-clickable>
@@ -88,21 +112,6 @@
 						<span>Views</span>
 						<cq-menu-dropdown>
 							<cq-views></cq-views>
-						</cq-menu-dropdown>
-					</cq-menu>
-
-					<cq-menu class="ciq-menu ciq-display collapse">
-						<span>Display</span>
-						<cq-menu-dropdown>
-							<cq-menu-dropdown-section class="chart-types">
-								<cq-heading>Chart Style</cq-heading>
-								<cq-menu-container cq-name="menuChartStyle"></cq-menu-container>
-							</cq-menu-dropdown-section>
-							<cq-menu-dropdown-section class="chart-aggregations">
-								<cq-menu-container
-									cq-name="menuChartAggregates"
-								></cq-menu-container>
-							</cq-menu-dropdown-section>
 						</cq-menu-dropdown>
 					</cq-menu>
 
