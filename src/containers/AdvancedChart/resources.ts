@@ -50,6 +50,10 @@ import defaultConfig from 'chartiq/js/defaultConfiguration'
 // ScriptIQ
 // import 'chartiq/plugins/scriptiq/scriptiq'
 
+// SignalIQ
+import 'chartiq/plugins/signaliq/signaliqDialog.js'
+import 'chartiq/plugins/signaliq/signaliq-marker.js'
+
 // Trading Central: Technical Insights
 // import 'chartiq/plugins/technicalinsights/components'
 
@@ -113,6 +117,7 @@ function getCustomConfig({
 	const {
 		/* eslint-disable */
 		marketDepth,
+		signalIQ,
 		termStructure,
 		tfc,
 		timeSpanEventPanel,
@@ -121,6 +126,7 @@ function getCustomConfig({
 	} = config.plugins
 	config.plugins = {
 		// marketDepth,
+		signalIQ,
 		// termStructure,
 		// tfc,
 		// timeSpanEventPanel,
