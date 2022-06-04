@@ -2,7 +2,9 @@
 	<cq-context ref="container">
 		<cq-color-picker></cq-color-picker>
 
-		<div class="ciq-nav full-screen-hide">
+		<cq-chart-instructions role="contentinfo"></cq-chart-instructions>
+
+		<div class="ciq-nav full-screen-hide" role="navigation">
 			<div class="sidenav-toggle ciq-toggles">
 				<cq-toggle
 					class="ciq-sidenav"
@@ -17,7 +19,16 @@
 			</div>
 
 			<cq-menu class="ciq-search">
-				<cq-lookup cq-keystroke-claim cq-uppercase></cq-lookup>
+				<cq-lookup
+					cq-keystroke-claim
+					cq-uppercase
+					role="search"
+					aria-labelledby="mainSymbol"
+					label-name="mainSymbol"
+					label-text="Main Symbol"
+					class="hide-label"
+				>
+				</cq-lookup>
 			</cq-menu>
 
 			<cq-side-nav cq-on="sidenavOn">
@@ -66,7 +77,12 @@
 							</cq-menu-dropdown>
 						</cq-menu>
 					</cq-info-toggle-dropdown>
-					<cq-toggle class="ciq-DT tableview-ui" cq-member="tableView">
+					<cq-toggle
+						class="ciq-DT tableview-ui"
+						cq-member="tableView"
+						role="button"
+						aria-pressed="false"
+					>
 						<span></span>
 						<cq-tooltip>Table View</cq-tooltip>
 					</cq-toggle>
@@ -161,50 +177,58 @@
 					<cq-menu class="ciq-menu stx-markers collapse">
 						<span>Events</span>
 						<cq-menu-dropdown>
-							<cq-heading>Chart Events</cq-heading>
-							<cq-item stxtap="Markers.showMarkers('square')">
-								Simple Square
-								<span class="ciq-radio">
-									<span></span>
-								</span>
-							</cq-item>
-							<cq-item stxtap="Markers.showMarkers('circle')">
-								Simple Circle
-								<span class="ciq-radio">
-									<span></span>
-								</span>
-							</cq-item>
-							<cq-item stxtap="Markers.showMarkers('callout')">
-								Callouts
-								<span class="ciq-radio">
-									<span></span>
-								</span>
-							</cq-item>
-							<cq-item
-								class="ta_markers-ui"
-								stxtap="Markers.showMarkers('trade')"
-							>
-								Trade
-								<span class="ciq-radio">
-									<span></span>
-								</span>
-							</cq-item>
-							<cq-item
-								class="video_markers-ui"
-								stxtap="Markers.showMarkers('video')"
-							>
-								Video
-								<span class="ciq-radio">
-									<span></span>
-								</span>
-							</cq-item>
-							<cq-separator></cq-separator>
-							<cq-item stxtap="Markers.showMarkers()" class="ciq-active">
-								None
-								<span class="ciq-radio">
-									<span></span>
-								</span>
-							</cq-item>
+							<div class="signaliq-ui">
+								<cq-heading>SignalIQ</cq-heading>
+								<cq-item>
+									<cq-clickable
+										cq-selector="cq-signaliq-dialog"
+										cq-method="open"
+									>
+										<cq-plus></cq-plus> New Signal
+									</cq-clickable>
+								</cq-item>
+								<cq-separator></cq-separator>
+								<cq-study-legend cq-signal-studies-only cq-no-close>
+									<cq-section-dynamic>
+										<cq-study-legend-content>
+											<template-placeholder cq-study-legend>
+												<cq-item>
+													<cq-label class="click-to-edit"></cq-label>
+													<div class="ciq-icon ciq-close"></div>
+												</cq-item>
+											</template-placeholder>
+										</cq-study-legend-content>
+									</cq-section-dynamic>
+									<cq-separator></cq-separator>
+								</cq-study-legend>
+							</div>
+							<div class="markers-ui">
+								<cq-heading>Chart Events</cq-heading>
+								<cq-item stxtap="Markers.showMarkers('square')" cq-no-close
+									>Simple Square<span class="ciq-switch"><span></span></span>
+								</cq-item>
+								<cq-item stxtap="Markers.showMarkers('circle')" cq-no-close
+									>Simple Circle<span class="ciq-switch"><span></span></span>
+								</cq-item>
+								<cq-item stxtap="Markers.showMarkers('callout')" cq-no-close
+									>Callouts<span class="ciq-switch"><span></span></span>
+								</cq-item>
+								<cq-item
+									class="ta_markers-ui"
+									stxtap="Markers.showMarkers('trade')"
+									cq-no-close
+									>Trade<span class="ciq-switch"><span></span></span>
+								</cq-item>
+								<cq-item
+									class="video_markers-ui"
+									stxtap="Markers.showMarkers('video')"
+									cq-no-close
+									>Video<span class="ciq-switch"><span></span></span>
+								</cq-item>
+								<cq-item stxtap="Markers.showMarkers('helicopter')" cq-no-close
+									>Abstract<span class="ciq-switch"><span></span></span>
+								</cq-item>
+							</div>
 							<div class="timespanevent-ui">
 								<cq-separator></cq-separator>
 								<cq-heading>Panel Events</cq-heading>
@@ -322,7 +346,7 @@
 
 		<cq-technicalinsights uid="" lang="en" disabled></cq-technicalinsights>
 
-		<div class="ciq-chart-area">
+		<div class="ciq-chart-area" role="main">
 			<div chartarea="true">
 				<div id="flexContainer">
 					<div id="cryptoGroup1">
@@ -430,6 +454,10 @@
 			</div>
 		</div>
 
+		<!-- Markers/Events -->
+		<cq-abstract-marker cq-type="helicopter"></cq-abstract-marker>
+		<!-- End Marker/Events -->
+
 		<cq-attribution></cq-attribution>
 
 		<div class="ciq-footer full-screen-hide">
@@ -509,7 +537,7 @@ export default class ActiveTraderComponent extends Vue {
 					item.label !== 'Market Depth' && item.label !== 'Extended Hours'
 			)
 
-			config.addOns.tableView.coverContainer = '#mainChartGroup .chartContainer'
+			config.addOns.tableView.coverContainer = '.ciq-chart-area'
 		}
 
 		// Delay the call to createChartAndUI so any other AdvancedChart components on the page
