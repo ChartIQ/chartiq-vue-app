@@ -1,8 +1,9 @@
 <template>
 	<cq-context ref="container">
 		<cq-color-picker></cq-color-picker>
+		<cq-chart-instructions role="contentinfo"></cq-chart-instructions>
 
-		<div class="ciq-nav full-screen-hide">
+		<div class="ciq-nav full-screen-hide" role="navigation">
 			<!-- enables the more button when in break-sm mode -->
 			<div class="sidenav-toggle ciq-toggles">
 				<cq-toggle
@@ -17,7 +18,16 @@
 			</div>
 
 			<cq-menu class="ciq-search">
-				<cq-lookup cq-keystroke-claim cq-uppercase></cq-lookup>
+				<cq-lookup
+					cq-keystroke-claim
+					cq-uppercase
+					role="search"
+					aria-labelledby="mainSymbol"
+					label-name="mainSymbol"
+					label-text="Main Symbol"
+					class="hide-label"
+				>
+				</cq-lookup>
 			</cq-menu>
 
 			<!-- any entry in this div will be shown in the side navigation bar in break-sm mode -->
@@ -67,9 +77,15 @@
 							</cq-menu-dropdown>
 						</cq-menu>
 					</cq-info-toggle-dropdown>
-					<cq-toggle class="ciq-DT tableview-ui" cq-member="tableView"
-						><span></span><cq-tooltip>Table View</cq-tooltip></cq-toggle
+					<cq-toggle
+						class="ciq-DT tableview-ui"
+						cq-member="tableView"
+						role="button"
+						aria-pressed="false"
 					>
+						<span></span>
+						<cq-tooltip>Table View</cq-tooltip>
+					</cq-toggle>
 				</div>
 			</cq-side-nav>
 
@@ -189,33 +205,33 @@
 									<cq-separator></cq-separator>
 								</cq-study-legend>
 							</div>
-							<cq-heading>Chart Events</cq-heading>
-							<cq-item stxtap="Markers.showMarkers('square')"
-								>Simple Square<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<cq-item stxtap="Markers.showMarkers('circle')"
-								>Simple Circle<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<cq-item stxtap="Markers.showMarkers('callout')"
-								>Callouts<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<cq-item
-								class="ta_markers-ui"
-								stxtap="Markers.showMarkers('trade')"
-								>Trade<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<cq-item
-								class="video_markers-ui"
-								stxtap="Markers.showMarkers('video')"
-								>Video<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<cq-item stxtap="Markers.showMarkers('abstract')"
-								>Abstract<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<cq-separator></cq-separator>
-							<cq-item stxtap="Markers.showMarkers()" class="ciq-active"
-								>None<span class="ciq-radio"><span></span></span>
-							</cq-item>
+							<div class="markers-ui">
+								<cq-heading>Chart Events</cq-heading>
+								<cq-item stxtap="Markers.showMarkers('square')" cq-no-close
+									>Simple Square<span class="ciq-switch"><span></span></span>
+								</cq-item>
+								<cq-item stxtap="Markers.showMarkers('circle')" cq-no-close
+									>Simple Circle<span class="ciq-switch"><span></span></span>
+								</cq-item>
+								<cq-item stxtap="Markers.showMarkers('callout')" cq-no-close
+									>Callouts<span class="ciq-switch"><span></span></span>
+								</cq-item>
+								<cq-item
+									class="ta_markers-ui"
+									stxtap="Markers.showMarkers('trade')"
+									cq-no-close
+									>Trade<span class="ciq-switch"><span></span></span>
+								</cq-item>
+								<cq-item
+									class="video_markers-ui"
+									stxtap="Markers.showMarkers('video')"
+									cq-no-close
+									>Video<span class="ciq-switch"><span></span></span>
+								</cq-item>
+								<cq-item stxtap="Markers.showMarkers('helicopter')" cq-no-close
+									>Abstract<span class="ciq-switch"><span></span></span>
+								</cq-item>
+							</div>
 							<div class="timespanevent-ui">
 								<cq-separator></cq-separator>
 								<cq-heading>Panel Events</cq-heading>
@@ -322,7 +338,7 @@
 		<cq-technicalinsights uid="" lang="en" disabled></cq-technicalinsights>
 
 		<cq-recent-symbols>
-			<div class="ciq-chart-area">
+			<div class="ciq-chart-area" role="main">
 				<div class="ciq-chart">
 					<cq-message-toaster
 						defaultDisplayTime="10"
