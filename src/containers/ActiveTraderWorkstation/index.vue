@@ -18,18 +18,28 @@
 				</cq-toggle>
 			</div>
 
-			<cq-menu class="ciq-search">
-				<cq-lookup
-					cq-keystroke-claim
-					cq-uppercase
-					role="search"
-					aria-labelledby="mainSymbol"
-					label-name="mainSymbol"
-					label-text="Main Symbol"
-					class="hide-label"
-				>
-				</cq-lookup>
-			</cq-menu>
+			<cq-clickable
+				role="button"
+				class="symbol-search"
+				cq-selector="cq-lookup-dialog"
+				cq-method="open"
+				delay="true"
+			>
+				<span class="ciq-lookup-icon"></span>
+				<cq-tooltip>Symbol Search</cq-tooltip>
+			</cq-clickable>
+
+			<cq-clickable
+				role="button"
+				class="symbol-search"
+				cq-selector="cq-lookup-dialog"
+				cq-method="open"
+				comparison="true"
+				delay="true"
+			>
+				<span class="ciq-comparison-icon"></span>
+				<cq-tooltip>Add Comparison</cq-tooltip>
+			</cq-clickable>
 
 			<cq-side-nav cq-on="sidenavOn">
 				<div class="icon-toggles ciq-toggles">
@@ -134,43 +144,7 @@
 					<cq-menu class="ciq-menu ciq-studies collapse" cq-focus="input">
 						<span>Studies</span>
 						<cq-menu-dropdown>
-							<cq-study-legend cq-no-close>
-								<cq-section-dynamic>
-									<cq-heading>Current Studies</cq-heading>
-									<cq-study-legend-content>
-										<template-placeholder cq-study-legend="true">
-											<cq-item>
-												<cq-label class="click-to-edit"></cq-label>
-												<div class="ciq-icon ciq-close"></div>
-											</cq-item>
-										</template-placeholder>
-									</cq-study-legend-content>
-									<cq-placeholder>
-										<div
-											stxtap="Layout.clearStudies()"
-											class="ciq-btn sm"
-											keyboard-selectable="true"
-										>
-											Clear All
-										</div>
-									</cq-placeholder>
-								</cq-section-dynamic>
-							</cq-study-legend>
-							<div class="scriptiq-ui">
-								<cq-heading>ScriptIQ</cq-heading>
-								<cq-item>
-									<cq-clickable
-										cq-selector="cq-scriptiq-editor"
-										cq-method="open"
-									>
-										New Script
-									</cq-clickable>
-								</cq-item>
-								<cq-scriptiq-menu></cq-scriptiq-menu>
-								<cq-separator></cq-separator>
-							</div>
-							<cq-heading cq-filter cq-filter-min="15"> Studies </cq-heading>
-							<cq-studies></cq-studies>
+							<cq-study-menu-manager></cq-study-menu-manager>
 						</cq-menu-dropdown>
 					</cq-menu>
 
@@ -429,23 +403,33 @@
 							</cq-palette-dock>
 
 							<div class="chartContainer">
-								<!-- stx-hu-tooltip is required only if addon tooltip is used and customization is required -->
-								<stx-hu-tooltip>
-									<stx-hu-tooltip-field field="DT">
-										<stx-hu-tooltip-field-name
-											>Date/Time</stx-hu-tooltip-field-name
-										>
-										<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
-									</stx-hu-tooltip-field>
-									<stx-hu-tooltip-field field="Close">
-										<stx-hu-tooltip-field-name></stx-hu-tooltip-field-name>
-										<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
-									</stx-hu-tooltip-field>
-								</stx-hu-tooltip>
+								<!-- tooltip markup is required only if addon tooltip is used and customization is required -->
+								<table class="hu-tooltip">
+									<caption>
+										Tooltip
+									</caption>
+									<tbody>
+										<tr hu-tooltip-field="" class="hu-tooltip-sr-only">
+											<th>Field</th>
+											<th>Value</th>
+										</tr>
+										<tr hu-tooltip-field="DT">
+											<td class="hu-tooltip-name">Date/Time</td>
+											<td class="hu-tooltip-value"></td>
+										</tr>
+										<tr hu-tooltip-field="Close">
+											<td class="hu-tooltip-name"></td>
+											<td class="hu-tooltip-value"></td>
+										</tr>
+									</tbody>
+								</table>
 
-								<cq-chart-title cq-marker cq-browser-tab></cq-chart-title>
+								<cq-chart-title
+									cq-marker
+									cq-browser-tab
+									cq-activate-symbol-search-on-click
+								></cq-chart-title>
 
-								<cq-comparison-lookup></cq-comparison-lookup>
 								<cq-chart-legend></cq-chart-legend>
 							</div>
 						</div>
@@ -630,41 +614,42 @@ export default class ActiveTraderComponent extends Vue {
 			}).updateData(CIQ.clone(initialPieData))
 
 			let last: any = null
-			stx.append('updateCurrentMarketData', (
-				data: any,
-				chart: any,
-				symbol: string /* , params: any */
-			) => {
-				if (symbol) {
-					return
-				}
-				const items = document.querySelectorAll('cq-tradehistory-body cq-item')
-
-				const d: any = {}
-				let i = 0
-				for (i = 0; i < items.length; i++) {
-					const item = items[i]
-					if (item === last) break
-					let dir = item.getAttribute('dir') as string
-					if (!dir) {
-						dir = 'even'
+			stx.append(
+				'updateCurrentMarketData',
+				(data: any, chart: any, symbol: string /* , params: any */) => {
+					if (symbol) {
+						return
 					}
-					dir = CIQ.capitalize(dir)
-					if (!d[dir]) {
-						d[dir] = 0
-					}
-					d[dir] += parseFloat(
-						(item.querySelector('[col=amount]') as Element).getAttribute(
-							'rawval'
-						) as string
+					const items = document.querySelectorAll(
+						'cq-tradehistory-body cq-item'
 					)
-				}
 
-				if (i) {
-					pieChart.updateData(d, 'add')
+					const d: any = {}
+					let i = 0
+					for (i = 0; i < items.length; i++) {
+						const item = items[i]
+						if (item === last) break
+						let dir = item.getAttribute('dir') as string
+						if (!dir) {
+							dir = 'even'
+						}
+						dir = CIQ.capitalize(dir)
+						if (!d[dir]) {
+							d[dir] = 0
+						}
+						d[dir] += parseFloat(
+							(item.querySelector('[col=amount]') as Element).getAttribute(
+								'rawval'
+							) as string
+						)
+					}
+
+					if (i) {
+						pieChart.updateData(d, 'add')
+					}
+					last = items[0]
 				}
-				last = items[0]
-			})
+			)
 			stx.addEventListener('symbolChange', () => {
 				pieChart.updateData(CIQ.clone(initialPieData))
 			})
