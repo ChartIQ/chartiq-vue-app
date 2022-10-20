@@ -79,7 +79,7 @@ export default class RecentSymbolsComponent extends Vue {
 			function showRecent() {
 				lookupFilters
 					.querySelectorAll('cq-filter')
-					.forEach(tab => activate(tab, false))
+					.forEach((tab) => activate(tab, false))
 				activate(recentTab)
 
 				self

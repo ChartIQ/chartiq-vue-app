@@ -37,6 +37,9 @@ import quoteFeed from 'chartiq/examples/feeds/quoteFeedSimulator.js'
 import PerfectScrollbar from 'chartiq/js/thirdparty/perfect-scrollbar.esm.js'
 
 // @ts-ignore
+import EmojiPopover from 'chartiq/js/thirdparty/emoji-popover.es'
+
+// @ts-ignore
 import getDefaultConfig from 'chartiq/js/defaultConfiguration'
 
 // Plugins
@@ -51,6 +54,8 @@ import getDefaultConfig from 'chartiq/js/defaultConfiguration'
 import 'chartiq/plugins/signaliq/signaliqDialog'
 import 'chartiq/plugins/signaliq/signaliq-marker'
 import 'chartiq/plugins/signaliq/signaliq-paintbar'
+
+import 'chartiq/plugins/studybrowser'
 
 // Trading Central: Technical Insights
 // import 'chartiq/plugins/technicalinsights/components'
@@ -77,7 +82,8 @@ function getConfig() {
 		quoteFeed,
 		// forecastQuoteFeed, // uncomment to enable forecast quote feed simulator
 		markerFeed: marker.MarkersSample,
-		scrollStyle: PerfectScrollbar
+		scrollStyle: PerfectScrollbar,
+		emojiPicker: EmojiPopover
 	})
 
 	return config

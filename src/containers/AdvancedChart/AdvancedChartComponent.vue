@@ -17,18 +17,28 @@
 				</cq-toggle>
 			</div>
 
-			<cq-menu class="ciq-search">
-				<cq-lookup
-					cq-keystroke-claim
-					cq-uppercase
-					role="search"
-					aria-labelledby="mainSymbol"
-					label-name="mainSymbol"
-					label-text="Main Symbol"
-					class="hide-label"
-				>
-				</cq-lookup>
-			</cq-menu>
+			<cq-clickable
+				role="button"
+				class="symbol-search"
+				cq-selector="cq-lookup-dialog"
+				cq-method="open"
+				delay="true"
+			>
+				<span class="ciq-lookup-icon"></span>
+				<cq-tooltip>Symbol Search</cq-tooltip>
+			</cq-clickable>
+
+			<cq-clickable
+				role="button"
+				class="symbol-search"
+				cq-selector="cq-lookup-dialog"
+				cq-method="open"
+				comparison="true"
+				delay="true"
+			>
+				<span class="ciq-comparison-icon"></span>
+				<cq-tooltip>Add Comparison</cq-tooltip>
+			</cq-clickable>
 
 			<!-- any entry in this div will be shown in the side navigation bar in break-sm mode -->
 			<cq-side-nav cq-on="sidenavOn">
@@ -136,44 +146,7 @@
 					<cq-menu class="ciq-menu ciq-studies collapse" cq-focus="input">
 						<span>Studies</span>
 						<cq-menu-dropdown>
-							<cq-study-legend cq-no-close>
-								<cq-section-dynamic>
-									<cq-heading>Current Studies</cq-heading>
-									<cq-study-legend-content>
-										<template-placeholder cq-study-legend="true">
-											<cq-item>
-												<cq-label class="click-to-edit"></cq-label>
-												<div class="ciq-icon ciq-close"></div>
-											</cq-item>
-										</template-placeholder>
-									</cq-study-legend-content>
-									<cq-placeholder>
-										<div
-											stxtap="Layout.clearStudies()"
-											class="ciq-btn sm"
-											keyboard-selectable="true"
-										>
-											Clear All
-										</div>
-									</cq-placeholder>
-								</cq-section-dynamic>
-							</cq-study-legend>
-							<div class="scriptiq-ui">
-								<cq-heading>ScriptIQ</cq-heading>
-								<cq-item
-									><cq-clickable
-										cq-selector="cq-scriptiq-editor"
-										cq-method="open"
-										>New Script</cq-clickable
-									></cq-item
-								>
-								<cq-scriptiq-menu></cq-scriptiq-menu>
-								<cq-separator></cq-separator>
-							</div>
-							<cq-heading cq-filter cq-filter-min="15">Studies</cq-heading>
-							<cq-scroll cq-no-maximize>
-								<cq-studies></cq-studies>
-							</cq-scroll>
+							<cq-study-menu-manager></cq-study-menu-manager>
 						</cq-menu-dropdown>
 					</cq-menu>
 
@@ -366,26 +339,37 @@
 					</cq-palette-dock>
 
 					<div class="chartContainer">
-						<!-- stx-hu-tooltip is required only if addon tooltip is used and customization is required -->
-						<stx-hu-tooltip>
-							<stx-hu-tooltip-field field="DT">
-								<stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
-								<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
-							</stx-hu-tooltip-field>
-							<stx-hu-tooltip-field field="Close">
-								<stx-hu-tooltip-field-name></stx-hu-tooltip-field-name>
-								<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
-							</stx-hu-tooltip-field>
-						</stx-hu-tooltip>
+						<!-- tooltip markup is required only if addon tooltip is used and customization is required -->
+						<table class="hu-tooltip">
+							<caption>
+								Tooltip
+							</caption>
+							<tbody>
+								<tr hu-tooltip-field="" class="hu-tooltip-sr-only">
+									<th>Field</th>
+									<th>Value</th>
+								</tr>
+								<tr hu-tooltip-field="DT">
+									<td class="hu-tooltip-name">Date/Time</td>
+									<td class="hu-tooltip-value"></td>
+								</tr>
+								<tr hu-tooltip-field="Close">
+									<td class="hu-tooltip-name"></td>
+									<td class="hu-tooltip-value"></td>
+								</tr>
+							</tbody>
+						</table>
 
-						<cq-chart-title cq-marker cq-browser-tab></cq-chart-title>
+						<cq-chart-title
+							cq-marker
+							cq-browser-tab
+							cq-activate-symbol-search-on-click
+						></cq-chart-title>
 
 						<cq-chartcontrol-group
 							class="full-screen-show"
 							cq-marker
 						></cq-chartcontrol-group>
-
-						<cq-comparison-lookup></cq-comparison-lookup>
 
 						<cq-chart-legend></cq-chart-legend>
 
@@ -481,7 +465,7 @@ export default class AdvancedChartComponent extends Vue {
  * and move it outside context node to be shared by all chart components
  */
 function portalizeContextDialogs(container: HTMLElement) {
-	container.querySelectorAll('cq-dialog').forEach(dialog => {
+	container.querySelectorAll('cq-dialog').forEach((dialog) => {
 		dialog.remove()
 		if (!dialogPortalized(dialog)) {
 			document.body.appendChild(dialog)
@@ -496,7 +480,7 @@ function dialogPortalized(el: Element) {
 
 	const tag = el.firstChild.nodeName.toLowerCase()
 	const result = Array.from(document.querySelectorAll(tag)).some(
-		el => !el.closest('cq-context')
+		(el) => !el.closest('cq-context')
 	)
 
 	return result

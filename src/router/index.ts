@@ -18,7 +18,7 @@ const routes: Array<RouteConfig> = [
 				/* webpackChunkName: "technical-analysis" */ '../containers/AdvancedChart/index.vue'
 			),
 		// Pick up properties from the query string and pass it to AdvancedChart component
-		props: route => ({
+		props: (route) => ({
 			symbol: route.query.symbol,
 			restore: route.query.restore !== 'false'
 		})
@@ -32,14 +32,14 @@ const routes: Array<RouteConfig> = [
 			)
 	},
 	// Enable ActiveTraderWorkstation
-	// {
-	// 	path: '/active-trader',
-	// 	name: 'Active Trader',
-	// 	component: () =>
-	// 		import(
-	// 			/* webpackChunkName: "active-trader" */ '../containers/ActiveTraderWorkstation/index.vue'
-	// 		)
-	// },
+	{
+		path: '/active-trader',
+		name: 'Active Trader',
+		component: () =>
+			import(
+				/* webpackChunkName: "active-trader" */ '../containers/ActiveTraderWorkstation/index.vue'
+			)
+	},
 	{
 		path: '/custom-chart',
 		name: 'Custom Chart',

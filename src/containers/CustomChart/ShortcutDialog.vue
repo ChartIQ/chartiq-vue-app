@@ -71,8 +71,8 @@ export default class ShortcutDialogComponent extends Vue {
 
 		const shortcut = e.data
 		this.drawingTools
-			.filter(item => item.tool === tool)
-			.map(item => {
+			.filter((item) => item.tool === tool)
+			.map((item) => {
 				item.shortcut = shortcut
 			})
 
@@ -80,7 +80,8 @@ export default class ShortcutDialogComponent extends Vue {
 	}
 
 	infoAbout(tool: any) {
-		this.selectedTool = this.drawingTools.find(item => item.tool === tool) || {}
+		this.selectedTool =
+			this.drawingTools.find((item) => item.tool === tool) || {}
 	}
 
 	updateDuplicates() {
@@ -100,7 +101,7 @@ export default class ShortcutDialogComponent extends Vue {
 		// eslint-disable-next-line
 		Object.entries(duplicates).forEach(([shortcut, indexes]) => {
 			if (indexes.length > 1) {
-				indexes.forEach(index => {
+				indexes.forEach((index) => {
 					tools[index].duplicate = true
 				})
 			}
@@ -119,7 +120,7 @@ export default class ShortcutDialogComponent extends Vue {
 
 	onSave() {
 		const shortcuts = this.drawingTools
-			.filter(item => item.shortcut)
+			.filter((item) => item.shortcut)
 			.reduce((acc: any, item) => {
 				acc[item.tool] = item.shortcut
 				return acc

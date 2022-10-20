@@ -37,6 +37,9 @@ import quoteFeed from 'chartiq/examples/feeds/quoteFeedSimulator.js'
 import PerfectScrollbar from 'chartiq/js/thirdparty/perfect-scrollbar.esm.js'
 
 // @ts-ignore
+// import EmojiPopover from 'chartiq/js/thirdparty/emoji-popover.es' // required for SignalIQ
+
+// @ts-ignore
 import getDefaultConfig from 'chartiq/js/defaultConfiguration'
 
 // Plugins
@@ -51,6 +54,8 @@ import 'chartiq/plugins/activetrader/cryptoiq'
 // import 'chartiq/plugins/signaliq/signaliqDialog'
 // import 'chartiq/plugins/signaliq/signaliq-marker'
 // import 'chartiq/plugins/signaliq/signaliq-paintbar'
+
+// import 'chartiq/plugins/studybrowser'
 
 // Trading Central: Technical Insights
 // import 'chartiq/plugins/technicalinsights/components'
@@ -78,6 +83,7 @@ function getConfig() {
 		// forecastQuoteFeed, // uncomment to enable forecast quote feed simulator
 		markerFeed: marker.MarkersSample,
 		scrollStyle: PerfectScrollbar
+		// emojiPicker: EmojiPopover // required for SignalIQ
 	})
 	return config
 }

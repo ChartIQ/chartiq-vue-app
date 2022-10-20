@@ -1,8 +1,6 @@
 <template>
 	<div id="HelloWorld">
-		<h2>
-			Hello world static chart example
-		</h2>
+		<h2>Hello world static chart example</h2>
 		<div ref="container" class="container"></div>
 	</div>
 </template>

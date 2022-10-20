@@ -19,8 +19,11 @@ import 'chartiq/examples/translations/translationSample'
 // Event Markers
 // @ts-ignore
 import marker from 'chartiq/examples/markers/markersSample.js'
+// import 'chartiq/examples/markers/markersSample.css'
 import 'chartiq/examples/markers/tradeAnalyticsSample'
+// import 'chartiq/examples/markers/tradeAnalyticsSample.css'
 import 'chartiq/examples/markers/videoSample'
+// import 'chartiq/examples/markers/videoSample.css'
 
 import 'chartiq/js/extras/svgcharts/piechart.js'
 
@@ -35,6 +38,9 @@ import quoteFeed from 'chartiq/examples/feeds/quoteFeedSimulator.js'
 
 // @ts-ignore
 import PerfectScrollbar from 'chartiq/js/thirdparty/perfect-scrollbar.esm.js'
+
+// @ts-ignore
+import EmojiPopover from 'chartiq/js/thirdparty/emoji-popover.es' // required for SignalIQ
 
 // @ts-ignore
 import defaultConfig from 'chartiq/js/defaultConfiguration'
@@ -52,6 +58,8 @@ import defaultConfig from 'chartiq/js/defaultConfiguration'
 import 'chartiq/plugins/signaliq/signaliqDialog'
 import 'chartiq/plugins/signaliq/signaliq-marker'
 import 'chartiq/plugins/signaliq/signaliq-paintbar'
+
+// import 'chartiq/plugins/studybrowser'
 
 // Trading Central: Technical Insights
 // import 'chartiq/plugins/technicalinsights/components'
@@ -82,7 +90,8 @@ function getConfig() {
 		quoteFeed,
 		// forecastQuoteFeed, // uncomment to enable forecast quote feed simulator
 		markerFeed: marker.MarkersSample,
-		scrollStyle: PerfectScrollbar
+		scrollStyle: PerfectScrollbar,
+		emojiPicker: EmojiPopover
 	})
 }
 
