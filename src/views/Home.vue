@@ -23,9 +23,7 @@
 				<h3>
 					<router-link to="/multi-chart">Multi-Chart</router-link>
 				</h3>
-				<p>
-					Two advanced chart components side by side in the same document.
-				</p>
+				<p>Two advanced chart components side by side in the same document.</p>
 			</li>
 			<li>
 				<h3
@@ -38,7 +36,7 @@
 				<p
 					v-if="ActiveTraderWorkstationEnabled === false"
 					class="disabled-link"
-					style="font-size: 0.70rem; margin-top: 0; margin-bottom: 0.70rem"
+					style="font-size: 0.7rem; margin-top: 0; margin-bottom: 0.7rem"
 				>
 					(To enable this link, uncomment all lines following the
 					<code>// Enable ActiveTraderWorkstation</code> comment in the
@@ -83,7 +81,7 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class Home extends Vue {
 	get ActiveTraderWorkstationEnabled(): boolean {
 		return (
-			this.$router.options.routes?.find(r => r.path === '/active-trader') !==
+			this.$router.options.routes?.find((r) => r.path === '/active-trader') !==
 			undefined
 		)
 	}

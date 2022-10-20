@@ -139,44 +139,7 @@
 					<cq-menu class="ciq-menu ciq-studies collapse" cq-focus="input">
 						<span>Studies</span>
 						<cq-menu-dropdown>
-							<cq-study-legend cq-no-close>
-								<cq-section-dynamic>
-									<cq-heading>Current Studies</cq-heading>
-									<cq-study-legend-content>
-										<template-placeholder cq-study-legend="true">
-											<cq-item>
-												<cq-label class="click-to-edit"></cq-label>
-												<div class="ciq-icon ciq-close"></div>
-											</cq-item>
-										</template-placeholder>
-									</cq-study-legend-content>
-									<cq-placeholder>
-										<div
-											stxtap="Layout.clearStudies()"
-											class="ciq-btn sm"
-											keyboard-selectable="true"
-										>
-											Clear All
-										</div>
-									</cq-placeholder>
-								</cq-section-dynamic>
-							</cq-study-legend>
-							<div class="scriptiq-ui">
-								<cq-heading>ScriptIQ</cq-heading>
-								<cq-item
-									><cq-clickable
-										cq-selector="cq-scriptiq-editor"
-										cq-method="open"
-										>New Script</cq-clickable
-									></cq-item
-								>
-								<cq-scriptiq-menu></cq-scriptiq-menu>
-								<cq-separator></cq-separator>
-							</div>
-							<cq-heading cq-filter cq-filter-min="15">Studies</cq-heading>
-							<cq-scroll cq-no-maximize>
-								<cq-studies></cq-studies>
-							</cq-scroll>
+							<cq-study-menu-manager></cq-study-menu-manager>
 						</cq-menu-dropdown>
 					</cq-menu>
 
@@ -390,19 +353,32 @@
 					</cq-palette-dock>
 
 					<div class="chartContainer">
-						<!-- stx-hu-tooltip is required only if addon tooltip is used and customization is required -->
-						<stx-hu-tooltip>
-							<stx-hu-tooltip-field field="DT">
-								<stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
-								<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
-							</stx-hu-tooltip-field>
-							<stx-hu-tooltip-field field="Close">
-								<stx-hu-tooltip-field-name></stx-hu-tooltip-field-name>
-								<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
-							</stx-hu-tooltip-field>
-						</stx-hu-tooltip>
+						<!-- tooltip markup is required only if addon tooltip is used and customization is required -->
+						<table class="hu-tooltip">
+							<caption>
+								Tooltip
+							</caption>
+							<tbody>
+								<tr hu-tooltip-field="" class="hu-tooltip-sr-only">
+									<th>Field</th>
+									<th>Value</th>
+								</tr>
+								<tr hu-tooltip-field="DT">
+									<td class="hu-tooltip-name">Date/Time</td>
+									<td class="hu-tooltip-value"></td>
+								</tr>
+								<tr hu-tooltip-field="Close">
+									<td class="hu-tooltip-name"></td>
+									<td class="hu-tooltip-value"></td>
+								</tr>
+							</tbody>
+						</table>
 
-						<cq-chart-title cq-marker cq-browser-tab></cq-chart-title>
+						<cq-chart-title
+							cq-marker
+							cq-browser-tab
+							cq-activate-symbol-search-on-click
+						></cq-chart-title>
 
 						<cq-chartcontrol-group
 							class="full-screen-show"
@@ -461,6 +437,15 @@
 		/>
 	</cq-context>
 </template>
+
+<style lang="scss">
+/* center dialogs on screen*/
+.cq-dialogs {
+	position: absolute;
+	width: 100vw;
+	top: 0;
+}
+</style>
 
 <script lang="ts">
 import { Component, Prop, Provide, Ref, Vue } from 'vue-property-decorator'
@@ -682,7 +667,7 @@ export default class CustomChartComponent extends Vue {
  * and move it outside context node to be shared by all chart components
  */
 function portalizeContextDialogs(container: HTMLElement) {
-	container.querySelectorAll('cq-dialog').forEach(dialog => {
+	container.querySelectorAll('cq-dialog').forEach((dialog) => {
 		dialog.remove()
 		if (!dialogPortalized(dialog)) {
 			document.body.appendChild(dialog)
@@ -697,7 +682,7 @@ function dialogPortalized(el: Element) {
 
 	const tag = el.firstChild.nodeName.toLowerCase()
 	return Array.from(document.querySelectorAll(tag)).some(
-		el => !el.closest('cq-context')
+		(el) => !el.closest('cq-context')
 	)
 }
 

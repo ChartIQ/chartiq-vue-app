@@ -18,7 +18,7 @@ const routes: Array<RouteConfig> = [
 				/* webpackChunkName: "technical-analysis" */ '../containers/AdvancedChart/index.vue'
 			),
 		// Pick up properties from the query string and pass it to AdvancedChart component
-		props: route => ({
+		props: (route) => ({
 			symbol: route.query.symbol,
 			restore: route.query.restore !== 'false'
 		})
