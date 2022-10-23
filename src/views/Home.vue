@@ -20,10 +20,8 @@
 				</p>
 			</li>
 			<li>
-				<h3>
-					<router-link to="/multi-chart">Multi-Chart</router-link>
-				</h3>
-				<p>Two advanced chart components side by side in the same document.</p>
+				<h3>Multi-chart</h3>
+				<p>Comming soon.</p>
 			</li>
 			<li>
 				<h3
