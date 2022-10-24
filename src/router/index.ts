@@ -23,14 +23,6 @@ const routes: Array<RouteConfig> = [
 			restore: route.query.restore !== 'false'
 		})
 	},
-	{
-		path: '/multi-chart',
-		name: 'Multi Chart',
-		component: () =>
-			import(
-				/* webpackChunkName: "multi-chart" */ '../containers/MultiChart/index.vue'
-			)
-	},
 	// Enable ActiveTraderWorkstation
 	// {
 	// 	path: '/active-trader',
