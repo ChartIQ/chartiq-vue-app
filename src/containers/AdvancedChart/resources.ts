@@ -123,7 +123,7 @@ function getCustomConfig({
 		/* eslint-disable */
 		marketDepth,
 		signalIQ,
-		termStructure,
+		technicalInsights,
 		tfc,
 		timeSpanEventPanel,
 		visualEarnings
@@ -132,7 +132,10 @@ function getCustomConfig({
 	config.plugins = {
 		// marketDepth,
 		signalIQ
-		// termStructure,
+		// technicalInsights: {
+		// 	...technicalInsights,
+		// 	uid: ""
+		// },
 		// tfc,
 		// timeSpanEventPanel,
 		// visualEarnings
