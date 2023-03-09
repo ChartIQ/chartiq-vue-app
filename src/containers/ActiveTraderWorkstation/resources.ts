@@ -85,6 +85,30 @@ function getConfig() {
 		scrollStyle: PerfectScrollbar
 		// emojiPicker: EmojiPopover // required for SignalIQ
 	})
+
+	// Select only plugin configurations that needs to be active for this chart
+	const {
+		/* eslint-disable */
+		marketDepth,
+		signalIQ,
+		technicalInsights,
+		tfc,
+		timeSpanEventPanel,
+		visualEarnings
+		/* eslint-enable */
+	} = config.plugins
+	config.plugins = {
+		marketDepth,
+		// signalIQ
+		// technicalInsights: {
+		// 	...technicalInsights,
+		// 	uid: ''
+		// },
+		tfc
+		// timeSpanEventPanel,
+		// visualEarnings
+	}
+
 	return config
 }
 

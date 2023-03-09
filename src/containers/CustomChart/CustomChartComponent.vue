@@ -290,38 +290,10 @@
 					</cq-menu>
 				</div>
 
-				<div class="trade-toggles ciq-toggles">
-					<cq-toggle class="tfc-ui sidebar stx-trade" cq-member="tfc"
-						><span></span><cq-tooltip>Trade</cq-tooltip></cq-toggle
-					>
-					<cq-toggle
-						class="analystviews-ui stx-analystviews"
-						cq-member="analystviews"
-						><span></span><cq-tooltip>Analyst Views</cq-tooltip></cq-toggle
-					>
-					<cq-toggle
-						class="technicalinsights-ui stx-technicalinsights"
-						cq-member="technicalinsights"
-						><span></span><cq-tooltip>Technical Insights</cq-tooltip></cq-toggle
-					>
-				</div>
+				<div class="ciq-toggles"></div>
 			</div>
 		</div>
 		<!-- End Navbar -->
-
-		<!-- custom tag for scriptiq only works when plugin is loaded -->
-		<cq-scriptiq class="scriptiq-ui"></cq-scriptiq>
-
-		<!-- custom tag for analystviews only works when plugin is loaded -->
-		<cq-analystviews
-			class="analystviews-ui"
-			token="eZOrIVNU3KR1f0cf6PTUYg=="
-			partner="1000"
-			disabled
-		></cq-analystviews>
-
-		<!-- custom tag for technicalinsights only works when plugin is loaded -->
-		<cq-technicalinsights uid="" lang="en" disabled></cq-technicalinsights>
 
 		<RecentSymbolsComponent :count="2" :getRecentSymbols="getRecentSymbols">
 			<div class="ciq-chart-area" role="main">
@@ -489,26 +461,6 @@ export default class CustomChartComponent extends Vue {
 			symbol: 'AAPL',
 			name: 'Apple Inc',
 			exchDisp: 'NASDAQ'
-		}
-
-		// Select only plugin configurations that needs to be active for this chart
-		const {
-			/* eslint-disable */
-			marketDepth,
-			signalIQ,
-			termStructure,
-			tfc,
-			timeSpanEventPanel,
-			visualEarnings
-			/* eslint-enable */
-		} = config.plugins
-		config.plugins = {
-			// marketDepth,
-			signalIQ
-			// termStructure,
-			// tfc,
-			// timeSpanEventPanel,
-			// visualEarnings
 		}
 
 		// Delay the call to createChartAndUI so any other AdvancedChart components on the page

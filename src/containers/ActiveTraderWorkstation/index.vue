@@ -286,39 +286,9 @@
 					</cq-menu>
 				</div>
 
-				<div class="trade-toggles ciq-toggles">
-					<cq-toggle class="tfc-ui sidebar stx-trade" cq-member="tfc">
-						<span></span>
-						<cq-tooltip>Trade</cq-tooltip>
-					</cq-toggle>
-					<cq-toggle
-						class="analystviews-ui stx-analystviews tc-ui stx-tradingcentral"
-						cq-member="analystviews"
-					>
-						<span></span>
-						<cq-tooltip>Analyst Views</cq-tooltip>
-					</cq-toggle>
-					<cq-toggle
-						class="technicalinsights-ui stx-technicalinsights recognia-ui stx-recognia"
-						cq-member="technicalinsights"
-					>
-						<span></span>
-						<cq-tooltip>Technical Insights</cq-tooltip>
-					</cq-toggle>
-				</div>
+				<div class="ciq-toggles"></div>
 			</div>
 		</div>
-
-		<cq-scriptiq class="scriptiq-ui"></cq-scriptiq>
-
-		<cq-analystviews
-			class="analystviews-ui"
-			token="eZOrIVNU3KR1f0cf6PTUYg=="
-			partner="1000"
-			disabled
-		></cq-analystviews>
-
-		<cq-technicalinsights uid="" lang="en" disabled></cq-technicalinsights>
 
 		<div class="ciq-chart-area" role="main">
 			<div chartarea="true">
