@@ -8,10 +8,6 @@ import 'chartiq/js/advanced'
 import 'chartiq/js/addOns'
 import 'chartiq/js/components'
 
-// Symbol mapping to market definition
-import 'chartiq/examples/markets/marketDefinitionsSample'
-import 'chartiq/examples/markets/marketSymbologySample'
-
 import 'chartiq/examples/feeds/symbolLookupChartIQ'
 
 import 'chartiq/examples/translations/translationSample'
@@ -21,6 +17,11 @@ import 'chartiq/examples/translations/translationSample'
 import marker from 'chartiq/examples/markers/markersSample.js'
 import 'chartiq/examples/markers/tradeAnalyticsSample'
 import 'chartiq/examples/markers/videoSample'
+
+// Symbol mapping to market definition
+import 'chartiq/examples/markets/marketDefinitionsSample'
+import 'chartiq/examples/markets/marketSymbologySample'
+import 'chartiq/examples/markets/timezones.js'
 
 import 'chartiq/js/extras/svgcharts/piechart.js'
 
@@ -76,6 +77,10 @@ import 'chartiq/plugins/tfc/tfc-demo' /* if using demo account class */
 
 //  Uncomment the following for the L2 simulator (required for the crypto sample and MarketDepth addOn)
 import 'chartiq/examples/feeds/L2_simulator' /* for use with cryptoiq */
+
+// @ts-ignore
+import getLicenseKey from 'chartiq/key'
+getLicenseKey(CIQ)
 
 function getConfig() {
 	const config = getDefaultConfig({

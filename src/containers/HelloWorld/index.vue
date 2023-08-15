@@ -10,6 +10,10 @@ import { Component, Ref, Vue } from 'vue-property-decorator'
 // @ts-ignore
 import { CIQ } from 'chartiq/js/chartiq'
 
+// @ts-ignore
+import getLicenseKey from 'chartiq/key'
+getLicenseKey(CIQ)
+
 @Component({})
 export default class HelloWorld extends Vue {
 	@Ref('container') readonly container!: HTMLDivElement

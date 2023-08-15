@@ -21,7 +21,7 @@
 			</li>
 			<li>
 				<h3>Multi-chart</h3>
-				<p>Coming soon.</p>
+				<p>Comming soon.</p>
 			</li>
 			<li>
 				<h3

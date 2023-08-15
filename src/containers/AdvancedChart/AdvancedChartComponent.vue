@@ -406,6 +406,11 @@ export default class AdvancedChartComponent extends Vue {
 		const config = this.config || getCustomConfig()
 		const container = this.container
 
+		const useStudyMenu = /studymenu=y/.test(document.location.href)
+		if (useStudyMenu) {
+			delete CIQ.Studies.Favorites
+		}
+
 		portalizeContextDialogs(container)
 		// Delay the call to createChartAndUI so any other AdvancedChart components on the page
 		// have a chance to call portalizeContextDialogs
