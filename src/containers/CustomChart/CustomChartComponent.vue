@@ -410,14 +410,7 @@
 	</cq-context>
 </template>
 
-<style lang="scss">
-/* center dialogs on screen*/
-.cq-dialogs {
-	position: absolute;
-	width: 100vw;
-	top: 0;
-}
-</style>
+<style lang="scss"></style>
 
 <script lang="ts">
 import { Component, Prop, Provide, Ref, Vue } from 'vue-property-decorator'

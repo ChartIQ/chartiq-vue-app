@@ -6,6 +6,9 @@ const path = require('path')
 module.exports = {
 	publicPath: '',
 	configureWebpack: {
+		devServer: {
+			historyApiFallback: true
+		},
 		module: {
 			rules: []
 		}

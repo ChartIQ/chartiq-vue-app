@@ -487,8 +487,7 @@ export default class ActiveTraderComponent extends Vue {
 			}
 
 			config.menuChartPreferences = config.menuChartPreferences.filter(
-				(item: any) =>
-					item.label !== 'Market Depth' && item.label !== 'Extended Hours'
+				(item: any) => item.label !== 'Extended Hours'
 			)
 
 			config.addOns.tableView.coverContainer = '.ciq-chart-area'

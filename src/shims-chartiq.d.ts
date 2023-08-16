@@ -1,8 +1,13 @@
+/**
+ * Shims for v8.8.0
+ */
 import { CIQ } from 'chartiq/js/componentUI'
 
 declare module 'chartiq/js/componentUI' {
 	export namespace CIQ {
 		let dialog: boolean
+
+		let localStorage: Storage
 
 		function simulateL2(params: {
 			/** Chart Engine */
@@ -16,14 +21,29 @@ declare module 'chartiq/js/componentUI' {
 		})
 
 		const SVGChart: any
+
+	}
+
+	export namespace CIQ.Studies {
+		let Favorites: object | undefined
+		interface StudyDescriptor {
+			name: string
+			disabled: boolean
+			type: string
+			panel: string
+		}
 	}
 
 	export namespace CIQ.UI {
 		interface Context {
-			stx: CIQ.ChartEngine,
-			config: any,
-			getAdvertised(name: string): any,
+			stx: CIQ.ChartEngine
+			config: any
+			getAdvertised(name: string): any
 			topNode: HTMLElement
 		}
+	}
+
+	export namespace CIQ.I18N {
+		let csv: string
 	}
 }
