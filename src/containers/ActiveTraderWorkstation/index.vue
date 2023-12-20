@@ -1,294 +1,143 @@
 <template>
 	<cq-context ref="container">
-		<cq-color-picker></cq-color-picker>
-
 		<cq-chart-instructions role="contentinfo"></cq-chart-instructions>
 
+		<!--  Begin Navbar -->
 		<div class="ciq-nav full-screen-hide" role="navigation">
+			<!-- enables the more button when in break-sm mode -->
 			<div class="sidenav-toggle ciq-toggles">
 				<cq-toggle
 					class="ciq-sidenav"
-					cq-member="sidenav"
-					cq-toggles="sidenavOn,sidenavOff"
-					cq-toggle-classes="active,"
-					keyboard-navigation="false"
-				>
-					<span></span>
-					<cq-tooltip>More</cq-tooltip>
-				</cq-toggle>
+					member="sidenav"
+					toggles="sidenavOn,sidenavOff"
+					toggle-classes="active,"
+					reader="More Options"
+					tooltip="More"
+					icon="morenav"
+				></cq-toggle>
 			</div>
 
-			<cq-clickable
-				role="button"
-				class="symbol-search"
-				cq-selector="cq-lookup-dialog"
-				cq-method="open"
-				delay="true"
-			>
-				<span class="ciq-lookup-icon"></span>
-				<cq-tooltip>Symbol Search</cq-tooltip>
-			</cq-clickable>
-
-			<cq-clickable
-				role="button"
-				class="symbol-search"
-				cq-selector="cq-lookup-dialog"
-				cq-method="open"
+			<cq-toggle
+				class="ciq-lookup-icon"
+				config="symbolsearch"
+				reader="Symbol Search"
+				tooltip="Symbol Search"
+				icon="search"
+				help-id="search_symbol_lookup"
+			></cq-toggle>
+			<cq-toggle
+				class="ciq-comparison-icon"
+				config="symbolsearch"
+				reader="Add Comparison"
+				tooltip="Add Comparison"
+				icon="compare"
+				help-id="add_comparison"
 				comparison="true"
-				delay="true"
-			>
-				<span class="ciq-comparison-icon"></span>
-				<cq-tooltip>Add Comparison</cq-tooltip>
-			</cq-clickable>
+			></cq-toggle>
 
+			<!-- any entry in this div will be shown in the side navigation bar in break-sm mode -->
 			<cq-side-nav cq-on="sidenavOn">
 				<div class="icon-toggles ciq-toggles">
-					<cq-toggle class="ciq-draw" cq-member="drawing">
-						<cq-help help-id="drawing_tools_toggle"></cq-help>
-						<span></span><cq-tooltip>Draw</cq-tooltip>
-					</cq-toggle>
-					<cq-info-toggle-dropdown>
-						<cq-toggle class="ciq-CH" cq-member="crosshair">
-							<span></span>
-							<cq-tooltip>Crosshair (Alt + \)</cq-tooltip>
-						</cq-toggle>
-
-						<cq-menu class="ciq-menu toggle-options collapse">
-							<span></span>
-							<cq-menu-dropdown>
-								<cq-item cq-member="crosshair"
-									>Hide Heads-Up Display<span class="ciq-radio"
-										><span></span></span
-								></cq-item>
-								<cq-item cq-member="headsUp-static"
-									>Show Heads-Up Display<span class="ciq-radio"
-										><span></span></span
-								></cq-item>
-							</cq-menu-dropdown>
-						</cq-menu>
-					</cq-info-toggle-dropdown>
-
-					<cq-info-toggle-dropdown>
-						<cq-toggle class="ciq-HU" cq-member="headsUp">
-							<span></span>
-							<cq-tooltip>Info</cq-tooltip>
-						</cq-toggle>
-
-						<cq-menu class="ciq-menu toggle-options collapse tooltip-ui">
-							<span></span>
-							<cq-menu-dropdown>
-								<cq-item cq-member="headsUp-dynamic"
-									>Show Dynamic Callout<span class="ciq-radio"
-										><span></span></span
-								></cq-item>
-								<cq-item cq-member="headsUp-floating"
-									>Show Tooltip<span class="ciq-radio"><span></span></span
-								></cq-item>
-							</cq-menu-dropdown>
-						</cq-menu>
-					</cq-info-toggle-dropdown>
 					<cq-toggle
-						class="ciq-DT tableview-ui"
-						cq-member="tableView"
-						role="button"
-						aria-pressed="false"
-					>
-						<span></span>
-						<cq-tooltip>Table View</cq-tooltip>
-					</cq-toggle>
+						class="ciq-draw"
+						member="drawing"
+						reader="Draw"
+						tooltip="Draw"
+						icon="draw"
+						help-id="drawing_tools_toggle"
+					></cq-toggle>
+					<cq-toggle
+						class="ciq-CH"
+						config="crosshair"
+						reader="Crosshair"
+						tooltip="Crosshair (Alt + \)"
+						icon="crosshair"
+					></cq-toggle>
+					<cq-menu
+						class="nav-dropdown toggle-options"
+						reader="Crosshair Options"
+						config="crosshair"
+					></cq-menu>
+					<cq-toggle
+						class="ciq-HU"
+						feature="tooltip"
+						config="info"
+						reader="Info"
+						tooltip="Info"
+						icon="info"
+					></cq-toggle>
+					<cq-menu
+						feature="tooltip"
+						class="nav-dropdown toggle-options"
+						reader="Info Options"
+						config="info"
+					></cq-menu>
+					<cq-toggle
+						class="ciq-DT"
+						feature="tableview"
+						member="tableView"
+						reader="Table View"
+						tooltip="Table View"
+						icon="tableview"
+					></cq-toggle>
 				</div>
 			</cq-side-nav>
 
 			<div class="ciq-menu-section">
 				<div class="ciq-dropdowns">
-					<cq-menu class="ciq-menu ciq-display collapse">
-						<cq-clickable
-							cq-tooltip-activator
-							stxbind="Layout.chartType"
-							ciq-no-icon-text="Display"
-						>
-							<span ciq-menu-icon="true"></span>
-							<cq-tooltip></cq-tooltip>
-						</cq-clickable>
-						<cq-menu-dropdown>
-							<cq-menu-dropdown-section class="chart-types">
-								<cq-heading>Chart Types</cq-heading>
-								<cq-menu-container cq-name="menuChartStyle"></cq-menu-container>
-							</cq-menu-dropdown-section>
-							<cq-menu-dropdown-section class="chart-aggregations">
-								<cq-separator></cq-separator>
-								<cq-heading>Aggregated Types</cq-heading>
-								<cq-menu-container
-									cq-name="menuChartAggregates"
-								></cq-menu-container>
-							</cq-menu-dropdown-section>
-						</cq-menu-dropdown>
-					</cq-menu>
-
-					<cq-menu class="ciq-menu ciq-period">
-						<span>
-							<cq-clickable stxbind="Layout.periodicity">1D</cq-clickable>
-						</span>
-						<cq-menu-dropdown>
-							<cq-menu-container cq-name="menuPeriodicity"></cq-menu-container>
-						</cq-menu-dropdown>
-					</cq-menu>
-
-					<cq-menu class="ciq-menu ciq-views collapse">
-						<span>Views</span>
-						<cq-menu-dropdown>
-							<cq-views></cq-views>
-						</cq-menu-dropdown>
-					</cq-menu>
-
-					<cq-menu class="ciq-menu ciq-studies collapse" cq-focus="input">
-						<span>Studies</span>
-						<cq-menu-dropdown>
-							<cq-study-menu-manager></cq-study-menu-manager>
-						</cq-menu-dropdown>
-					</cq-menu>
-
-					<cq-menu class="ciq-menu stx-markers collapse">
-						<span>Events</span>
-						<cq-menu-dropdown>
-							<div class="signaliq-ui">
-								<cq-heading>SignalIQ</cq-heading>
-								<cq-item>
-									<cq-clickable
-										cq-selector="cq-signaliq-dialog"
-										cq-method="open"
-									>
-										<cq-plus></cq-plus> New Signal
-									</cq-clickable>
-								</cq-item>
-								<cq-separator></cq-separator>
-								<cq-study-legend cq-signal-studies-only cq-no-close>
-									<cq-section-dynamic>
-										<cq-study-legend-content>
-											<template-placeholder cq-study-legend>
-												<cq-item>
-													<cq-label class="click-to-edit"></cq-label>
-													<div class="ciq-icon ciq-close"></div>
-												</cq-item>
-											</template-placeholder>
-										</cq-study-legend-content>
-									</cq-section-dynamic>
-									<cq-separator></cq-separator>
-								</cq-study-legend>
-							</div>
-							<div class="markers-ui">
-								<cq-heading>Chart Events</cq-heading>
-								<cq-item stxtap="Markers.showMarkers('square')" cq-no-close
-									>Simple Square<span class="ciq-switch"><span></span></span>
-								</cq-item>
-								<cq-item stxtap="Markers.showMarkers('circle')" cq-no-close
-									>Simple Circle<span class="ciq-switch"><span></span></span>
-								</cq-item>
-								<cq-item stxtap="Markers.showMarkers('callout')" cq-no-close
-									>Callouts<span class="ciq-switch"><span></span></span>
-								</cq-item>
-								<cq-item
-									class="ta_markers-ui"
-									stxtap="Markers.showMarkers('trade')"
-									cq-no-close
-									>Trade<span class="ciq-switch"><span></span></span>
-								</cq-item>
-								<cq-item
-									class="video_markers-ui"
-									stxtap="Markers.showMarkers('video')"
-									cq-no-close
-									>Video<span class="ciq-switch"><span></span></span>
-								</cq-item>
-								<cq-item stxtap="Markers.showMarkers('helicopter')" cq-no-close
-									>Abstract<span class="ciq-switch"><span></span></span>
-								</cq-item>
-							</div>
-							<div class="timespanevent-ui">
-								<cq-separator></cq-separator>
-								<cq-heading>Panel Events</cq-heading>
-								<cq-item
-									class="span-event"
-									stxtap="TimeSpanEvent.showMarkers('Order')"
-									cq-no-close
-								>
-									Order
-									<span class="ciq-checkbox ciq-active">
-										<span></span>
-									</span>
-								</cq-item>
-								<cq-item
-									class="span-event"
-									stxtap="TimeSpanEvent.showMarkers('CEO')"
-									cq-no-close
-								>
-									CEO
-									<span class="ciq-checkbox ciq-active">
-										<span></span>
-									</span>
-								</cq-item>
-								<cq-item
-									class="span-event"
-									stxtap="TimeSpanEvent.showMarkers('News')"
-									cq-no-close
-								>
-									News
-									<span class="ciq-checkbox ciq-active">
-										<span></span>
-									</span>
-								</cq-item>
-							</div>
-						</cq-menu-dropdown>
-					</cq-menu>
-
-					<cq-menu class="ciq-menu ciq-preferences collapse">
-						<span></span>
-						<cq-menu-dropdown>
-							<cq-menu-dropdown-section class="chart-preferences">
-								<cq-heading>Chart Preferences</cq-heading>
-								<cq-menu-container
-									cq-name="menuChartPreferences"
-								></cq-menu-container>
-								<cq-separator></cq-separator>
-							</cq-menu-dropdown-section>
-							<cq-menu-dropdown-section class="y-axis-preferences">
-								<cq-heading>Y-Axis Preferences</cq-heading>
-								<cq-menu-container
-									cq-name="menuYAxisPreferences"
-								></cq-menu-container>
-								<cq-separator></cq-separator>
-							</cq-menu-dropdown-section>
-							<cq-menu-dropdown-section class="chart-addons">
-								<cq-heading>Additional Features</cq-heading>
-								<cq-menu-container cq-name="menuAddOns"></cq-menu-container>
-								<cq-separator></cq-separator>
-							</cq-menu-dropdown-section>
-							<cq-menu-dropdown-section class="chart-theme">
-								<cq-heading>Themes</cq-heading>
-								<cq-themes></cq-themes>
-								<cq-separator></cq-separator>
-							</cq-menu-dropdown-section>
-							<cq-menu-dropdown-section class="chart-locale">
-								<cq-heading>Locale</cq-heading>
-								<cq-item keyboard-selectable="false"
-									><cq-clickable
-										cq-selector="cq-timezone-dialog"
-										cq-method="open"
-										keyboard-selectable="true"
-										>Change Timezone</cq-clickable
-									></cq-item
-								>
-								<cq-item stxsetget="Layout.Language()">
-									<cq-flag></cq-flag>
-									<cq-language-name>Change Language</cq-language-name>
-								</cq-item>
-							</cq-menu-dropdown-section>
-						</cq-menu-dropdown>
-					</cq-menu>
+					<cq-menu
+						class="nav-dropdown ciq-display"
+						reader="Display"
+						config="display"
+						binding="Layout.chartType"
+						icon=""
+						help-id="display_dropdown"
+						tooltip=""
+					></cq-menu>
+					<cq-menu
+						class="nav-dropdown ciq-period"
+						reader="Periodicity"
+						config="period"
+						text=""
+						binding="Layout.periodicity"
+					></cq-menu>
+					<cq-menu
+						class="nav-dropdown ciq-views alignright-md alignright-sm"
+						config="views"
+						text="Views"
+						icon="views"
+						responsive=""
+						tooltip="Views"
+					></cq-menu>
+					<cq-menu
+						class="nav-dropdown ciq-studies alignright"
+						cq-focus="input"
+						config="studies"
+						text="Studies"
+						icon="studies"
+						responsive=""
+						tooltip="Studies"
+					></cq-menu>
+					<cq-menu
+						class="nav-dropdown ciq-markers alignright"
+						config="markers"
+						text="Events"
+						icon="events"
+						responsive=""
+						tooltip="Events"
+					></cq-menu>
+					<cq-menu
+						class="nav-dropdown ciq-preferences alignright"
+						reader="Preferences"
+						config="preferences"
+						icon="preferences"
+						tooltip="Preferences"
+					></cq-menu>
 				</div>
-
 				<div class="ciq-toggles"></div>
 			</div>
 		</div>
+		<!-- End Navbar -->
 
 		<div class="ciq-chart-area" role="main">
 			<div chartarea="true">
@@ -319,25 +168,7 @@
 					<div id="cryptoGroup2">
 						<div id="marketDepthBookmark"></div>
 						<div id="orderBookContainer">
-							<cq-orderbook cq-active>
-								<cq-orderbook-table reverse>
-									<cq-scroll cq-no-claim>
-										<cq-orderbook-bids></cq-orderbook-bids>
-									</cq-scroll>
-								</cq-orderbook-table>
-								<cq-orderbook-table>
-									<cq-scroll cq-no-claim>
-										<cq-orderbook-asks></cq-orderbook-asks>
-									</cq-scroll>
-								</cq-orderbook-table>
-								<template-placeholder>
-									<cq-item cq-size-shading>
-										<div col="price">Price</div>
-										<div col="size">Size</div>
-										<div col="amount">Amount</div>
-									</cq-item>
-								</template-placeholder>
-							</cq-orderbook>
+							<cq-orderbook cq-active></cq-orderbook>
 						</div>
 					</div>
 
@@ -347,9 +178,9 @@
 					>
 						<div class="ciq-chart">
 							<cq-message-toaster
-								defaultDisplayTime="10"
-								defaultTransition="slide"
-								defaultPosition="top"
+								default-display-time="10"
+								default-transition="slide"
+								default-position="top"
 							></cq-message-toaster>
 
 							<cq-palette-dock>
@@ -360,6 +191,7 @@
 										orientation="vertical"
 										min-height="300"
 										cq-drawing-edit="none"
+										cq-keystroke-claim
 									></cq-drawing-palette>
 									<cq-drawing-settings
 										class="palette-settings"
@@ -400,7 +232,73 @@
 									cq-activate-symbol-search-on-click
 								></cq-chart-title>
 
-								<cq-chart-legend></cq-chart-legend>
+								<!-- Full-screen icons -->
+								<cq-marker class="chart-control-group full-screen-show">
+									<cq-toggle
+										class="ciq-lookup-icon"
+										config="symbolsearch"
+										reader="Symbol Search"
+										tooltip="Symbol Search"
+										icon="search"
+										help-id="search_symbol_lookup"
+									></cq-toggle>
+									<cq-toggle
+										class="ciq-comparison-icon"
+										config="symbolsearch"
+										reader="Add Comparison"
+										tooltip="Add Comparison"
+										icon="compare"
+										help-id="add_comparison"
+										comparison="true"
+									></cq-toggle>
+									<cq-toggle
+										class="ciq-draw"
+										member="drawing"
+										reader="Draw"
+										icon="draw"
+										tooltip="Draw"
+										help-id="drawing_tools_toggle"
+									></cq-toggle>
+									<cq-toggle
+										class="ciq-CH"
+										config="crosshair"
+										reader="Crosshair"
+										icon="crosshair"
+										tooltip="Crosshair (Alt + \)"
+									></cq-toggle>
+									<cq-toggle
+										class="ciq-DT"
+										feature="tableview"
+										member="tableView"
+										reader="Table View"
+										icon="tableview"
+										tooltip="Table View"
+									></cq-toggle>
+									<cq-menu
+										class="nav-dropdown ciq-period full-screen"
+										config="period"
+										text
+										binding="Layout.periodicity"
+									></cq-menu>
+								</cq-marker>
+
+								<cq-study-legend
+									class="hovershow"
+									marker-label="Signals"
+									filter="signal"
+									cq-marker
+								></cq-study-legend>
+								<cq-study-legend
+									class="hovershow"
+									marker-label="Plots"
+									clone-to-panel
+									filter="panel"
+									button-remove="true"
+									series="true"
+									cq-marker
+								></cq-study-legend>
+
+								<cq-loader></cq-loader>
 							</div>
 						</div>
 					</div>
@@ -410,24 +308,43 @@
 
 		<!-- Markers/Events -->
 		<cq-abstract-marker cq-type="helicopter"></cq-abstract-marker>
-		<!-- End Marker/Events -->
 
+		<!-- Attribution component -->
 		<cq-attribution></cq-attribution>
 
-		<div class="ciq-footer full-screen-hide">
-			<cq-share-button></cq-share-button>
-			<div
-				class="shortcuts-ui ciq-shortcut-button"
+		<!-- Begin Footer -->
+		<div role="complementary" class="ciq-footer full-screen-hide">
+			<cq-share-button
+				class="ciq-share-button bottom"
+				reader="Share Chart"
+				icon="share"
+				tooltip="Share"
+			></cq-share-button>
+			<cq-toggle
+				feature="shortcuts"
+				member="session.shortcuts"
+				class="ciq-shortcut-button bottom"
 				stxtap="Layout.showShortcuts()"
-				title="Toggle Shortcut Legend"
-			></div>
-			<div
-				class="help-ui ciq-help-button"
+				reader="Toggle Shortcut Legend"
+				icon="shortcuts"
+				tooltip="Shortcuts"
+			></cq-toggle>
+			<cq-toggle
+				feature="help"
+				member="session.help"
+				class="ciq-help-button bottom"
 				stxtap="Layout.toggleHelp()"
-				title="Toggle Interactive Help"
-			></div>
-			<cq-show-range></cq-show-range>
+				reader="Toggle Interactive Help"
+				icon="help"
+				tooltip="Interactive Help"
+			></cq-toggle>
+			<cq-show-range
+				config="range"
+				role="group"
+				aria-labelledby="label_showRange"
+			></cq-show-range>
 		</div>
+		<!-- End Footer -->
 
 		<cq-dialogs>
 			<cq-dialog>
@@ -483,12 +400,14 @@ export default class ActiveTraderComponent extends Vue {
 				step: true,
 				record: true,
 				height: '40%',
-				precedingContainer: '#marketDepthBookmark'
+				precedingContainer: '#marketDepthBookmark',
+				interaction: true
 			}
 
-			config.menuChartPreferences = config.menuChartPreferences.filter(
-				(item: any) => item.label !== 'Extended Hours'
-			)
+			config.menus.preferences.content =
+				config.menus.preferences.content.filter(
+					(item: any) => item.label !== 'Extended Hours'
+				)
 
 			config.addOns.tableView.coverContainer = '.ciq-chart-area'
 		}

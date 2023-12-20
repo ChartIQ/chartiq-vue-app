@@ -118,6 +118,19 @@ function getConfig() {
 		// visualEarnings
 	}
 
+	// Inject Drawing Tools menu item
+	config.menus.preferences.content = [
+		...config.menus.preferences.content,
+		{ type: 'separator' },
+		{ type: 'heading', label: 'Preferences' },
+		{
+			type: 'item',
+			label: 'Drawing Tools',
+			tap: 'Layout.openPreferences',
+			value: 'drawingTools'
+		}
+	]
+
 	return config
 }
 
