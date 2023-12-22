@@ -8,6 +8,12 @@
 import Vue from 'vue'
 import router from './router'
 
+/**
+ * This import is used for automated testing of the chart library. It is not needed
+ * for customer projects.
+ */
+import './testInitialization'
+
 import AppAllTemplates from './App.vue'
 
 Vue.config.productionTip = false

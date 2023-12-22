@@ -1,21 +1,12 @@
 <template>
 	<div id="Custom">
-		<div class="info">
+		<div class="custom-chart-info">
 			<h2>Custom chart</h2>
 
 			<div>
 				...is a customization of the Advanced Chart component template,
 				featuring the addition of:
 				<ul>
-					<li>
-						A native Vue component that enhances the ChartIQ symbol lookup web
-						component by storing previously entered symbols and making them
-						accessible in the lookup's RECENT tab.
-						<br /><span class="instruction"
-							>Select Enter Symbol in the upper left corner of the chart or +
-							Compare...</span
-						>
-					</li>
 					<li>
 						A dialog box implemented in Vue to add
 						<a
@@ -50,7 +41,7 @@ export default class Custom extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-.info {
+.custom-chart-info {
 	user-select: text;
 	padding: 8px 14px;
 	font-size: 0.8rem;
