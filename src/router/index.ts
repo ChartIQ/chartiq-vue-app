@@ -25,12 +25,12 @@ const routes: Array<RouteConfig> = [
 	},
 	// Enable ActiveTraderWorkstation
 	// {
-	// 	path: '/active-trader',
-	// 	name: 'Active Trader',
-	// 	component: () =>
-	// 		import(
-	// 			/* webpackChunkName: "active-trader" */ '../containers/ActiveTraderWorkstation/index.vue'
-	// 		)
+	//	path: '/active-trader',
+	//	name: 'Active Trader',
+	//	component: () =>
+	//		import(
+	//			/* webpackChunkName: "active-trader" */ '../containers/ActiveTraderWorkstation/index.vue'
+	//		)
 	// },
 	{
 		path: '/custom-chart',

@@ -11,7 +11,7 @@ import { Component, Ref, Vue } from 'vue-property-decorator'
 import { CIQ } from 'chartiq/js/chartiq'
 
 // @ts-ignore
-import getLicenseKey from 'chartiq/key'
+import getLicenseKey from 'keyDir/key'
 getLicenseKey(CIQ)
 
 @Component({})
@@ -801,7 +801,7 @@ export default class HelloWorld extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../node_modules/chartiq/css/stx-chart.css'; // Chart API
+@import 'chartiq/css/stx-chart.css'; // Chart API
 
 #HelloWorld {
 	margin: 20px;

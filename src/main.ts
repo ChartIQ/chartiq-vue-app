@@ -44,13 +44,13 @@ Vue.config.ignoredElements = [/^cq-.*$/]
 
 // Workaround to be able to use the HTML template element in Vue template
 Vue.component('template-placeholder', {
-	render: function(createElement) {
+	render: function (createElement) {
 		return createElement('template', this.$slots.default)
 	}
 })
 
 new Vue({
-	render: h => h(AppAdvancedChartOnly)
+	render: (h) => h(AppAdvancedChartOnly)
 }).$mount('#app')
 
 */

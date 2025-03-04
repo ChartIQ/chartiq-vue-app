@@ -22,8 +22,9 @@ export default class AdvancedWrapper extends Vue {
 	@Prop({ type: String, default: '' }) symbol!: string
 	@Prop({ type: String, default: '_advanced-chart' }) chartId!: string
 	@Prop({ type: Boolean, default: true }) restore!: boolean
-
-	@Prop({ type: Function, default: ({}) => {} }) onChartReady!: Function
+	@Prop({ type: Function, default: ({}) => {} }) onChartReady!: (
+		stx: CIQ.ChartEngine
+	) => {}
 
 	config: any
 

@@ -17,10 +17,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+tests/logs
+*.log
 
 # Editor directories and files
 .idea
-.vscode
 *.suo
 *.ntvs*
 *.njsproj
@@ -28,9 +29,17 @@ pnpm-debug.log*
 *.sw?
 *~
 
-#Ignore stx folder
-stx
+# vscode
+.vscode/
+*.code-workspace
 
-#Ignore allure reports
+# eclipse
+.project
+.settings/
+
+
+#Ignore test
+stx
 allure-report
 allure-results
+tests/package-lock.json

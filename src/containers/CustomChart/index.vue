@@ -50,7 +50,9 @@ export default class Custom extends Vue {}
 	color: #000;
 
 	h2 {
-		font: 600 1.2rem Helvetica, sans-serif;
+		font:
+			600 1.2rem Helvetica,
+			sans-serif;
 		text-transform: uppercase;
 		letter-spacing: 6px;
 		margin: 0 14px 8px 3px;

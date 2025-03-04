@@ -58,9 +58,6 @@ import 'chartiq/plugins/signaliq/signaliq-paintbar'
 
 // import 'chartiq/plugins/studybrowser'
 
-// Trading Central: Technical Insights
-// import 'chartiq/plugins/technicalinsights/components'
-
 // TFC plugin
 import 'chartiq/plugins/tfc/tfc-loader'
 import 'chartiq/plugins/tfc/tfc-demo' /* if using demo account class */
@@ -69,8 +66,11 @@ import 'chartiq/plugins/tfc/tfc-demo' /* if using demo account class */
 // import 'chartiq/plugins/timespanevent/timespanevent'
 // import 'chartiq/plugins/timespanevent/examples/timeSpanEventSample' /* if using sample */
 
-// Trading Central: Analyst Views
-// import 'chartiq/plugins/analystviews/components'
+// Trading Central: Technical Insights
+// import 'chartiq/plugins/technicalinsights/components'
+
+// Trading Central: Technical Views
+// import 'chartiq/plugins/technicalviews/components'
 
 // Visual Earnings
 // import 'chartiq/plugins/visualearnings/visualearnings'
@@ -78,7 +78,7 @@ import 'chartiq/plugins/tfc/tfc-demo' /* if using demo account class */
 //  Uncomment the following for the L2 simulator (required for the crypto sample and MarketDepth addOn)
 // import 'chartiq/examples/feeds/L2_simulator' /* for use with cryptoiq */
 // @ts-ignore
-import getLicenseKey from 'chartiq/key'
+import getLicenseKey from 'keyDir/key'
 getLicenseKey(CIQ)
 
 function getConfig() {
@@ -108,14 +108,38 @@ function getConfig() {
 	} = config.plugins
 	config.plugins = {
 		// marketDepth,
-		signalIQ
+		// technicalViews: {
+		//	container: "",
+		//	moduleName: "",
+		//	channel: "",
+		//	toggleMarkup: "",
+		//	partner: 0,
+		//	...technicalViews,
+		//	token: ""
+		//  // use for dynamic plugin load
+		//  // @ts-ignore // ignore since load isn't defined in ts definition
+		// 	// load() {
+		// 	//	return import('chartiq/plugins/technicalviews/components')
+		// 	// }
+		// },
 		// technicalInsights: {
-		// 	...technicalInsights,
-		// 	uid: ''
+		//	container: "",
+		//	moduleName: "",
+		//	lang: "en",
+		//	channel: "",
+		//	toggleMarkup: "",
+		//	...technicalInsights,
+		//	token: ""
+		// 	// use for dynamic plugin load
+		//  // @ts-ignore // ignore since load isn't defined in ts definition
+		// 	// load() {
+		// 	//	return import('chartiq/plugins/technicalinsights/components')
+		// 	// }
 		// },
 		// tfc,
 		// timeSpanEventPanel,
 		// visualEarnings
+		signalIQ
 	}
 
 	// Inject Drawing Tools menu item
