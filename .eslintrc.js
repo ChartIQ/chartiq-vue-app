@@ -18,7 +18,9 @@ module.exports = {
 		'@typescript-eslint/member-delimiter-style': 'off',
 		'@typescript-eslint/no-use-before-define': ['error', { functions: false }],
 		'no-empty-pattern': 'off',
-		'comma-dangle': ['error', 'only-multiline']
+		'comma-dangle': ['error', 'only-multiline'],
+		'@typescript-eslint/ban-ts-comment': 'off',
+		'@typescript-eslint/ban-types': 'off'
 	},
 	parser: 'vue-eslint-parser',
 	parserOptions: {

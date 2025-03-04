@@ -5,11 +5,10 @@
 - [Overview](#overview)
 - [Requirements](#requirements)
 - [Getting started](#getting-started)
-- [Building the project](#building-the-project)
 - [Customization](#customization)
-- [Enabling plug-ins](#enabling-plug\-ins)
-- [HTML template replacement](#HTML-template-replacement)
-- [Important note](#Important-note)
+- [Enabling plug-ins](#enabling-plug-ins)
+- [HTML template replacement](#html-template-replacement)
+- [Important note](#important-note)
 - [Questions and support](#questions-and-support)
 - [Contributing to this project](#contributing-to-this-project)
 
@@ -27,28 +26,47 @@ The ChartIQ Vue application is a toolkit of components that enable you to build 
 
 ## Requirements
 
-- A copy of the ChartIQ JavaScript library (works best with version 9.1.3).
+- A copy of the ChartIQ JavaScript library (works best with version 9.6.2).
   - If you do not have a copy of the library or need a different version, please contact your account manager or visit our <a href="https://pages.marketintelligence.spglobal.com/ChartIQ-Follow-up-Request.html" target="_blank">Request Follow-Up Site</a>.
 
 ## Getting started
 
-To implement this project:
+**Important:** When installing a package directly from npm (beginning with ChartIQ v9.5.1), the defaults are not npm compatible and will require adjustments.
 
-1. Clone the repository
-2. Extract the contents of your zipped ChartIQ library package
-3. Copy the tarball (.tgz file) from the extracted library package into the root of this project
-4. Run the following commands from the root of the project:
+To implement this project **using the ChartIQ tarball**:
+
+1. Clone the repository.
+2. Extract the contents of your zipped ChartIQ library package.
+3. Copy the tarball (.tgz file) from the extracted library package into the root of this project.
+4. Run the following command from the root of the project:
     - `npm install ./chartiq-x.x.x.tgz` or `yarn add ./chartiq-x.x.x.tgz` to install the charting library
+5. If you want to locate your key.js file somewhere other than within the tarball, change the
+	webpack.config.js resolve.alias property to point to the proper key.js path. Alternatively, you may
+	specify the path directly when importing the key.js file.
+
+To implement this project using the ChartIQ packages **hosted on npmjs.org**:
+
+1. Clone the repository.
+2. In package.json, add the @chartiq/* packages from "chartiq-dependencies-for-npm" section into "dependencies" section.
+3. If you want to implement additional plugins from ChartIQ, you can install them from npmjs as well.
+4. Set up an environment variable KEY_FILE_DIR to use when starting webpack, that points to the proper key.js path.
+	Alternatively, you may specify the path directly when importing the key.js file.
+
+In both cases, continue with the following steps:
+
+- Run the following commands from the root of the project:
     - `npm install` or `yarn install` to install the rest of the dependencies
     - `npm run start` or `yarn run start` to start up the development server
-5. Open your browser to http://localhost:8080/ to load the application
+- Open your browser to [http://localhost:8080](http://localhost:8080) to load the application.
 
-**Note:** When you are upgrading or changing your license, we recommend that you completely remove the old library before reinstalling the new one, for example:
+**Note:** When you are upgrading or changing your license using the tarball, we recommend that you completely remove the old library before reinstalling the new one, for example:
 
 ```sh
 npm uninstall chartiq
 npm install ./chartiq-x.x.x.tgz
 ```
+
+To build in production mode, run `npm run build` or `yarn run build`.  If you wish to deploy to a folder other than the root folder, set the environment variable VUE_APP_BASE_URL, for example, like so: "/dist/".
 
 ## Customization
 

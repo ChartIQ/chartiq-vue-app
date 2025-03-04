@@ -72,8 +72,8 @@ import 'chartiq/plugins/studybrowser'
 // import 'chartiq/plugins/timespanevent/timespanevent'
 // import 'chartiq/plugins/timespanevent/examples/timeSpanEventSample' /* if using sample */
 
-// Trading Central: Analyst Views
-// import 'chartiq/plugins/analystviews/components'
+// Trading Central: Technical Views
+// import 'chartiq/plugins/technicalviews/components'
 
 // Visual Earnings
 // Important Note. Uncomment the corresponding configuration object below when enabling this plugin.
@@ -83,7 +83,7 @@ import 'chartiq/plugins/studybrowser'
 // import 'chartiq/examples/feeds/L2_simulator' /* for use with cryptoiq */
 
 // @ts-ignore
-import getLicenseKey from 'chartiq/key'
+import getLicenseKey from 'keyDir/key'
 getLicenseKey(CIQ)
 
 // Creates a complete customised configuration object
@@ -107,7 +107,7 @@ function getCustomConfig({
 	chartId?: string
 	symbol?: string | { symbol: string; name?: string; exchDisp?: string }
 	restore?: boolean
-	onChartReady?: Function
+	onChartReady?: (stx: CIQ.ChartEngine) => {}
 } = {}) {
 	const config = getConfig()
 
@@ -121,7 +121,7 @@ function getCustomConfig({
 	if (typeof restore == 'boolean') config.restore = restore
 
 	// config.quoteFeeds[0].behavior.refreshInterval = 0; // disables quotefeed refresh
-	config.onChartReady = onChartReady
+	if (onChartReady) config.onChartReady = onChartReady
 
 	config.menuStudiesConfig.excludedStudies = {
 		...config.menuStudiesConfig.excludedStudies,
@@ -131,12 +131,12 @@ function getCustomConfig({
 	// Select only plugin configurations that needs to be active for this chart
 	const {
 		/* eslint-disable */
-		analystViews,
 		marketDepth,
 		signalIQ,
 		studyBrowser,
-		termStructure,
+		crossSection,
 		technicalInsights,
+		technicalViews,
 		tfc,
 		timeSpanEventPanel,
 		visualEarnings
@@ -148,35 +148,44 @@ function getCustomConfig({
 		studyBrowser
 		// timeSpanEventPanel,
 		// visualEarnings
-		// // use for dynamic plugin load
-		// analystViews: {
-		// 	...analystViews,
-		// 	load() {
-		// 		// @ts-ignore
-		// 		return import('chartiq/plugins/analystviews/components')
-		// 	}
+		// technicalViews: {
+		//	container: "",
+		//	moduleName: "",
+		//	channel: "",
+		//	toggleMarkup: "",
+		//	partner: 0,
+		//	...technicalViews,
+		//	token: ""
+		//  // use for dynamic plugin load
+		//  // @ts-ignore // ignore since load isn't defined in ts definition
+		// 	// load() {
+		// 	//	return import('chartiq/plugins/technicalviews/components')
+		// 	// }
 		// },
 		// technicalInsights: {
-		// 	...technicalInsights,
-		// 	uid: '', // uid token
+		//	container: "",
+		//	moduleName: "",
+		//	lang: "en",
+		//	channel: "",
+		//	toggleMarkup: "",
+		//	...technicalInsights,
+		//	token: "",
 		// 	// use for dynamic plugin load
-		// 	load() {
-		// 		// @ts-ignore
-		// 		return import('chartiq/plugins/technicalinsights/components')
-		// 	}
+		//  // @ts-ignore // ignore since load isn't defined in ts definition
+		// 	// load() {
+		//	//	return import('chartiq/plugins/technicalinsights/components')
+		//	// }
 		// },
-		// use for dynamic plugin load
 		// tfc: {
 		// 	...tfc,
-		// 	// use for dynamic pluginn load
-		// 	load() {
-		// 		return Promise.all([
-		// 			// @ts-ignore
-		// 			import('chartiq/plugins/tfc/tfc-loader'),
-		// 			// @ts-ignore
-		// 			import('chartiq/plugins/tfc/tfc-demo')
-		// 		])
-		// 	}
+		// 	// use for dynamic plugin load
+		//  // @ts-ignore // ignore since load isn't defined in ts definition
+		// 	// load() {
+		// 	//	return Promise.all([
+		// 	//		import('chartiq/plugins/tfc/tfc-loader'),
+		// 	//		import('chartiq/plugins/tfc/tfc-demo')
+		// 	//	])
+		// 	// }
 		// }
 	}
 

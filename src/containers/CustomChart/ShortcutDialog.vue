@@ -161,7 +161,9 @@ export default class ShortcutDialogComponent extends Vue {
 }
 
 .title {
-	font: 600 1rem Helvetica, sans-serif;
+	font:
+		600 1rem Helvetica,
+		sans-serif;
 	padding: 20px;
 }
 
