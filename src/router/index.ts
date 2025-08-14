@@ -1,10 +1,7 @@
-import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 
-Vue.use(VueRouter)
-
-const routes: Array<RouteConfig> = [
+const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/',
 		name: 'Home',
@@ -17,21 +14,28 @@ const routes: Array<RouteConfig> = [
 			import(
 				/* webpackChunkName: "technical-analysis" */ '../containers/AdvancedChart/index.vue'
 			),
-		// Pick up properties from the query string and pass it to AdvancedChart component
-		props: (route) => ({
-			symbol: route.query.symbol,
-			restore: route.query.restore !== 'false'
+		// Pick up properties from the query string and pass them to the AdvancedChart component
+		props: (route: any) => ({
+			symbol: route.query.symbol
 		})
 	},
 	// Enable ActiveTraderWorkstation
 	// {
-	//	path: '/active-trader',
-	//	name: 'Active Trader',
-	//	component: () =>
-	//		import(
-	//			/* webpackChunkName: "active-trader" */ '../containers/ActiveTraderWorkstation/index.vue'
-	//		)
+	// 	path: '/active-trader',
+	// 	name: 'Active Trader',
+	// 	component: () =>
+	// 		import(
+	// 			/* webpackChunkName: "active-trader" */ '../containers/ActiveTraderWorkstation/index.vue'
+	// 		)
 	// },
+	{
+		path: '/multi-chart',
+		name: 'Multi Chart',
+		component: () =>
+			import(
+				/* webpackChunkName: "multi-chart" */ '../containers/MultiChart/index.vue'
+			)
+	},
 	{
 		path: '/custom-chart',
 		name: 'Custom Chart',
@@ -50,9 +54,8 @@ const routes: Array<RouteConfig> = [
 	}
 ]
 
-const router = new VueRouter({
-	mode: 'history',
-	base: process.env.VUE_APP_BASE_URL || '/',
+const router = createRouter({
+	history: createWebHistory(),
 	routes
 })
 

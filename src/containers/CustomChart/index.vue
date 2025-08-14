@@ -28,16 +28,8 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+<script setup lang="ts">
 import CustomChartComponent from './CustomChartComponent.vue'
-
-@Component({
-	components: {
-		CustomChartComponent
-	}
-})
-export default class Custom extends Vue {}
 </script>
 
 <style lang="scss" scoped>

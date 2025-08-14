@@ -1,8 +1,6 @@
 // Required imports from chartiq for advanced chart
 
-// @ts-ignore
 import { CIQ } from 'chartiq/js/chartiq'
-// @ts-ignore
 import 'chartiq/js/advanced'
 
 import 'chartiq/js/addOns'
@@ -40,7 +38,6 @@ import PerfectScrollbar from 'chartiq/js/thirdparty/perfect-scrollbar.esm.js'
 // @ts-ignore
 import EmojiPopover from 'chartiq/js/thirdparty/emoji-popover.es'
 
-// @ts-ignore
 import getDefaultConfig from 'chartiq/js/defaultConfiguration'
 
 // Plugins

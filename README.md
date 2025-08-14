@@ -19,14 +19,14 @@ The ChartIQ Vue application is a toolkit of components that enable you to build 
 - `AdvancedChartComponent` &mdash; Creates a full-featured chart with a fully developed user interface
 - `CustomChartComponent` &mdash; Integrates native Vue components with ChartIQ W3C-standard web components
 - `ActiveTraderComponent` &mdash; Sets up a comprehensive information dashboard for traders who trade frequently
-- `Multi` &mdash; Displays two advanced charts on screen simultaneously
+- `MultiChart` &mdash; Provides the ability to use multiple charts in a grid, managed by a single UI
 - `HelloWorld` &mdash; Creates a basic chart with no UI as a starting point for your Vue app
 
 **Note:** This application has been designed to simplify the transfer of modules such as `src/containers/AdvancedChart` to other applications. We don't expect that developers will use the application as is with all modules included. So, to make transferring modules easier, we more or less duplicated resource files in each module.
 
 ## Requirements
 
-- A copy of the ChartIQ JavaScript library (works best with version 9.6.2).
+- A copy of the ChartIQ JavaScript library (works best with version 9.9.0).
   - If you do not have a copy of the library or need a different version, please contact your account manager or visit our <a href="https://pages.marketintelligence.spglobal.com/ChartIQ-Follow-up-Request.html" target="_blank">Request Follow-Up Site</a>.
 
 ## Getting started
@@ -72,11 +72,11 @@ To build in production mode, run `npm run build` or `yarn run build`.  If you wi
 
 ### Web component templates
 
-The templates in `AdvancedChartComponent`, `CustomChartComponent`, and `ActiveTraderComponent` are collections of ChartIQ's user interface web components. You can customize the chart user interface by adding, removing, or modifying UI components. You can also add your own custom Vue components.
+The templates in `AdvancedChartComponent`, `CustomChartComponent`, `ActiveTraderComponent` and `MultiChart` are collections of ChartIQ's user interface web components. You can customize the chart user interface by adding, removing, or modifying UI components. You can also add your own custom Vue components.
 
 ### Configuration
 
-You can configure a variety of chart features by modifying the configuration object provided to the component definition files of `AdvancedChartComponent`, `CustomChartComponent`, and `ActiveTraderComponent`. Look for the call to `getConfig` in the resources files.
+You can configure a variety of chart features by modifying the configuration object provided to the component definition files of `AdvancedChartComponent`, `CustomChartComponent`,  `ActiveTraderComponent`, and `MultiChart`. Look for the call to `getConfig` in the resources files.
 
 A default configuration is part of the ChartIQ library. See the [Chart Configuration](tutorial-Chart%20Configuration.html) tutorial for all the configuration details.
 
@@ -170,7 +170,8 @@ and the following line in [index.vue](./src/containers/AdvancedChart/index.vue):
 
 Because `<template>` is an internal Vue tag, the `<template-placeholder>` component is defined in [main.js](./src/main.ts) as a substitute for the HTML `<template>` element.
 
-The `<template-placeholder>` component is used in place of the HTML `<template>` element in [AdvancedChartComponent.vue](./src/containers/AdvancedChart/AdvancedChartComponent.vue), [CustomChartComponent.vue](./src/containers/CustomChart/CustomChartComponent.vue), and the ActiveTraderWorkstation [index.vue](./src/containers/ActiveTraderWorkstation/index.vue).
+The `<template-placeholder>` component is used in place of the HTML `<template>` element in [AdvancedChartComponent.vue](./src/containers/AdvancedChart/AdvancedChartComponent.vue), [CustomChartComponent.vue](./src/containers/CustomChart/CustomChartComponent.vue),  ActiveTraderWorkstation [index.vue](./src/containers/ActiveTraderWorkstation/index.vue)
+and the [index.vue](./src/containers/MultiChart/index.vue).
 
 See [Github issues](https://github.com/vuejs/vue/issues/10717) for more information.
 

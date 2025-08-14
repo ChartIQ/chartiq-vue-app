@@ -11,10 +11,13 @@ import 'chartiq/js/components'
 import 'chartiq/examples/feeds/symbolLookupChartIQ'
 
 import 'chartiq/examples/translations/translationSample'
+// @ts-ignore
+import quoteFeed from 'chartiq/examples/feeds/quoteFeedSimulator'
+import getDefaultConfig, { Resources } from 'chartiq/js/defaultConfiguration'
 
 // Event Markers
 // @ts-ignore
-import marker from 'chartiq/examples/markers/markersSample.js'
+//import marker from 'chartiq/examples/markers/markersSample.js'
 import 'chartiq/examples/markers/tradeAnalyticsSample'
 import 'chartiq/examples/markers/videoSample'
 
@@ -28,20 +31,9 @@ import 'chartiq/js/extras/svgcharts/piechart.js'
 // import 'chartiq/examples/help/helpContent.js'
 
 // @ts-ignore
-import quoteFeed from 'chartiq/examples/feeds/quoteFeedSimulator.js'
+//import quoteFeedSimulator from 'chartiq/examples/feeds/quoteFeedSimulator.js'
 
 // Uncomment the following for the forecasting simulator (required for the forecasting sample).
-// @ts-ignore
-// import forecastQuoteFeed from 'chartiq/examples/feeds/quoteFeedForecastSimulator.js'
-
-// @ts-ignore
-import PerfectScrollbar from 'chartiq/js/thirdparty/perfect-scrollbar.esm.js'
-
-// @ts-ignore
-import EmojiPopover from 'chartiq/js/thirdparty/emoji-popover.es' // required for SignalIQ
-
-// @ts-ignore
-import defaultConfig from 'chartiq/js/defaultConfiguration'
 
 // Plugins
 
@@ -82,35 +74,33 @@ import 'chartiq/plugins/studybrowser'
 // Uncomment the following for the L2 simulator (required for the crypto sample and MarketDepth addOn)
 // import 'chartiq/examples/feeds/L2_simulator' /* for use with cryptoiq */
 
+import 'chartiq/plugins/chart2music'
+
 // @ts-ignore
 import getLicenseKey from 'keyDir/key'
 getLicenseKey(CIQ)
 
 // Creates a complete customised configuration object
-function getConfig() {
-	return defaultConfig({
-		quoteFeed,
-		// forecastQuoteFeed, // uncomment to enable forecast quote feed simulator
-		markerFeed: marker.MarkersSample,
-		scrollStyle: PerfectScrollbar,
-		emojiPicker: EmojiPopover
-	})
+function getConfig(resources: Resources = {}): any {
+	if (!resources.quoteFeed && resources.quoteFeed !== null) {
+		resources.quoteFeed = quoteFeed
+	}
+	return getDefaultConfig(resources)
 }
 
 // Creates a complete customised configuration object
 function getCustomConfig({
 	chartId,
 	symbol,
-	restore,
-	onChartReady
+	onChartReady,
+	resources
 }: {
 	chartId?: string
 	symbol?: string | { symbol: string; name?: string; exchDisp?: string }
-	restore?: boolean
 	onChartReady?: (stx: CIQ.ChartEngine) => {}
+	resources?: Partial<Resources>
 } = {}) {
-	const config = getConfig()
-
+	const config = getConfig(resources)
 	// Update chart configuration by modifying default configuration
 	config.chartId = chartId || '_advanced-chart'
 	config.initialSymbol = symbol || {
@@ -118,8 +108,7 @@ function getCustomConfig({
 		name: 'Apple Inc',
 		exchDisp: 'NASDAQ'
 	}
-	if (typeof restore == 'boolean') config.restore = restore
-
+	if (symbol) config.restore = { ...config.restore, symbol: false }
 	// config.quoteFeeds[0].behavior.refreshInterval = 0; // disables quotefeed refresh
 	if (onChartReady) config.onChartReady = onChartReady
 
@@ -131,6 +120,9 @@ function getCustomConfig({
 	// Select only plugin configurations that needs to be active for this chart
 	const {
 		/* eslint-disable */
+		advanced,
+		// @ts-ignore
+		chart2music,
 		marketDepth,
 		signalIQ,
 		studyBrowser,
@@ -143,6 +135,9 @@ function getCustomConfig({
 		/* eslint-enable */
 	} = config.plugins
 	config.plugins = {
+		advanced,
+		// @ts-ignore
+		chart2music,
 		// marketDepth,
 		signalIQ,
 		studyBrowser

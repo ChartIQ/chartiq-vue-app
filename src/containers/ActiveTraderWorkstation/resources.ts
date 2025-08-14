@@ -1,9 +1,8 @@
 // Required imports from chartiq for advanced chart
 
-// @ts-ignore
 import { CIQ } from 'chartiq/js/chartiq'
-// @ts-ignore
-import 'chartiq/js/advanced'
+//import 'chartiq/js/advanced'
+import 'chartiq/js/standard'
 
 import 'chartiq/js/addOns'
 import 'chartiq/js/components'
@@ -13,7 +12,6 @@ import 'chartiq/examples/feeds/symbolLookupChartIQ'
 import 'chartiq/examples/translations/translationSample'
 
 // Event Markers
-// @ts-ignore
 import marker from 'chartiq/examples/markers/markersSample.js'
 import 'chartiq/examples/markers/tradeAnalyticsSample'
 import 'chartiq/examples/markers/videoSample'
@@ -26,8 +24,6 @@ import 'chartiq/examples/markets/timezones.js'
 import 'chartiq/js/extras/svgcharts/piechart.js'
 
 // import 'chartiq/examples/help/helpContent.js'
-
-// @ts-ignore
 import quoteFeed from 'chartiq/examples/feeds/quoteFeedSimulator.js'
 
 // Uncomment the following for the forecasting simulator (required for the forecasting sample).
@@ -40,7 +36,6 @@ import PerfectScrollbar from 'chartiq/js/thirdparty/perfect-scrollbar.esm.js'
 // @ts-ignore
 // import EmojiPopover from 'chartiq/js/thirdparty/emoji-popover.es' // required for SignalIQ
 
-// @ts-ignore
 import getDefaultConfig from 'chartiq/js/defaultConfiguration'
 
 // Plugins
@@ -56,7 +51,7 @@ import 'chartiq/plugins/activetrader/cryptoiq'
 // import 'chartiq/plugins/signaliq/signaliq-marker'
 // import 'chartiq/plugins/signaliq/signaliq-paintbar'
 
-// import 'chartiq/plugins/studybrowser'
+import 'chartiq/plugins/studybrowser'
 
 // TFC plugin
 import 'chartiq/plugins/tfc/tfc-loader'
@@ -67,10 +62,10 @@ import 'chartiq/plugins/tfc/tfc-demo' /* if using demo account class */
 // import 'chartiq/plugins/timespanevent/examples/timeSpanEventSample' /* if using sample */
 
 // Trading Central: Technical Insights
-// import 'chartiq/plugins/technicalinsights/components'
+//import 'chartiq/plugins/technicalinsights/components'
 
 // Trading Central: Technical Views
-// import 'chartiq/plugins/technicalviews/components'
+//import 'chartiq/plugins/technicalviews/components'
 
 // Visual Earnings
 // import 'chartiq/plugins/visualearnings/visualearnings'
@@ -123,6 +118,7 @@ function getConfig() {
 		// timeSpanEventPanel,
 		// visualEarnings
 	}
+	config.enabledAddOns.fullScreen = false
 
 	return config
 }
