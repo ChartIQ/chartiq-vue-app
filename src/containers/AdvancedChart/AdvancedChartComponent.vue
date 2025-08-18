@@ -138,7 +138,6 @@
 			</div>
 		</div>
 		<!-- End Navbar -->
-
 		<div class="ciq-chart-area" role="main">
 			<div class="ciq-chart">
 				<cq-message-toaster
@@ -146,7 +145,6 @@
 					default-transition="slide"
 					default-position="top"
 				></cq-message-toaster>
-
 				<cq-palette-dock>
 					<div class="palette-dock-container">
 						<cq-drawing-palette
@@ -322,78 +320,77 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
-// @ts-ignore
-import { CIQ } from 'chartiq/js/componentUI'
+import { defineComponent, onMounted, onBeforeUnmount, ref } from 'vue'
+import { CIQ } from 'chartiq/js/standard'
+import 'chartiq/js/components'
+import 'chartiq/js/addOns'
+
 import { getCustomConfig } from './resources' // ChartIQ library resources
 
-@Component({})
-export default class AdvancedChartComponent extends Vue {
-	@Prop() config: any
-	@Prop({ type: Function, default: ({}) => {} }) chartInitialized!: Function
+export default defineComponent({
+	props: {
+		config: Object,
+		resources: Object,
+		chartInitialized: Function,
+		symbol: String
+	},
+	setup(props) {
+		const container = ref<HTMLElement | null>(null)
+		let stx: CIQ.ChartEngine | null = null
+		let uiContext: any = null
 
-	@Ref('container') container!: HTMLElement
+		onMounted(() => {
+			if (!container.value) return
+			const configObj = getCustomConfig({
+				resources: props.resources,
+				// @ts-ignore
+				symbol: props.symbol
+			})
+			// @ts-ignore
+			CIQ.extend(configObj, props.config)
 
-	stx: CIQ.ChartEngine | undefined
+			const uiCtx = new CIQ.UI.Chart().createChartAndUI({
+				container: container.value,
+				config: configObj
+			})
 
-	mounted() {
-		const config = this.config || getCustomConfig()
-		const container = this.container
+			uiContext = uiCtx
+			stx = uiCtx.stx
 
-		const useStudyMenu = /studymenu=y/.test(document.location.href)
-		if (useStudyMenu) {
-			delete CIQ.Studies.Favorites
+			if (props.chartInitialized) {
+				props.chartInitialized({
+					chartEngine: stx,
+					uiContext
+				})
+			}
+		})
+
+		onBeforeUnmount(() => {
+			// Destroy the ChartEngine instance when unloading the component.
+			// This will stop internal processes such as quotefeed polling.
+			if (!stx) return
+			stx.destroy()
+		})
+		// Decorate the library function to avoid copying html2canvas.min.js to distribution to js/thirdparty directory
+		/* ;(function initDynamicShare() {
+			// @ts-ignore
+			if (CIQ.Share.fullChart2PNG_init) return
+			// @ts-ignore
+			const fullChart2PNG = CIQ.Share.fullChart2PNG
+			// @ts-ignore
+			CIQ.Share.fullChart2PNG = function (stx, params, cb) {
+				// @ts-ignore
+				import('chartiq/js/thirdparty/html2canvas.min.js').then(() => {
+					fullChart2PNG(stx, params, cb)
+				})
+			}
+			// @ts-ignore
+			CIQ.Share.fullChart2PNG_init = true
+		})() */
+
+		return {
+			container
 		}
-
-		portalizeContextDialogs(container)
-		// Delay the call to createChartAndUI so any other AdvancedChart components on the page
-		// have a chance to call portalizeContextDialogs
-		window.setTimeout(() => {
-			const uiContext = this.createChartAndUI(config)
-			this.stx = uiContext.stx
-
-			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
-		}, 0)
 	}
-
-	beforeDestroy() {
-		// Destroy the ChartEngine instance when unloading the component.
-		// This will stop internal processes such as quotefeed polling.
-		this.stx?.destroy()
-	}
-
-	createChartAndUI(config: any) {
-		const container = this.container
-		const chart = new CIQ.UI.Chart()
-		const uiContext = chart.createChartAndUI({ container, config })
-
-		return uiContext
-	}
-}
-
-/**
- * For applications that have more then one chart, keep single dialog of the same type
- * and move it outside context node to be shared by all chart components
- */
-function portalizeContextDialogs(container: HTMLElement) {
-	container.querySelectorAll('cq-dialog').forEach((dialog) => {
-		dialog.remove()
-		if (!dialogPortalized(dialog)) {
-			document.body.appendChild(dialog)
-		}
-	})
-}
-
-function dialogPortalized(el: Element) {
-	if (!el.firstChild) {
-		throw new Error('Element has no children')
-	}
-
-	const tag = el.firstChild.nodeName.toLowerCase()
-	const result = Array.from(document.querySelectorAll(tag)).some(
-		(el) => !el.closest('cq-context')
-	)
-
-	return result
-}
+})
 </script>

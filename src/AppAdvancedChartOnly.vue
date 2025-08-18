@@ -10,13 +10,12 @@
 </style>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { defineComponent } from 'vue'
 import AdvancedChartWrapper from './containers/AdvancedChart/index.vue'
 
-@Component({
+export default defineComponent({
 	components: {
 		AdvancedChartWrapper
 	}
 })
-export default class App extends Vue {}
 </script>

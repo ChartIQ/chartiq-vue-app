@@ -1,69 +1,70 @@
 <template>
 	<AdvancedChartComponent
 		:config="config"
-		:chartInitialized="chartInitialized"
-	/>
+		:resources="resources"
+		:chartInitialized="initialized"
+		:symbol="symbol"
+	>
+		<slot />
+	</AdvancedChartComponent>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { defineComponent } from 'vue'
 import AdvancedChartComponent from './AdvancedChartComponent.vue'
-import { getCustomConfig } from './resources' // ChartIQ library resources
-
+import { CIQ } from 'chartiq/js/standard'
+import quoteFeedSimulator from 'chartiq/examples/feeds/quoteFeedSimulator'
 // @ts-ignore
-import { CIQ } from 'chartiq/js/componentUI' // Required for types in chartInitialized
+import PerfectScrollbar from 'chartiq/js/thirdparty/perfect-scrollbar.esm.js'
+// @ts-ignore
+import EmojiPopover from 'chartiq/js/thirdparty/emoji-popover.es.js'
+import marker from 'chartiq/examples/markers/markersSample'
 
-@Component({
+export default defineComponent({
 	components: {
 		AdvancedChartComponent
+	},
+	props: {
+		config: Object,
+		resources: Object,
+		chartInitialized: Function,
+		symbol: String
+	},
+	setup(props) {
+		const exampleResources = {
+			quoteFeed: quoteFeedSimulator,
+			markerFeed: marker.MarkersSample,
+			scrollStyle: PerfectScrollbar,
+			emojiPicker: EmojiPopover
+		}
+
+		const getExampleConfig = () => ({
+			chartId: '_coreChart',
+			// @ts-ignore
+			initialSymbol: props.symbol || {
+				symbol: 'AAPL',
+				name: 'Apple Inc',
+				exchDisp: 'NASDAQ'
+			},
+			onChartReady: () => {}
+		})
+		const config = { ...getExampleConfig() }
+		// @ts-ignore
+		const resources = { ...exampleResources, ...props.resources }
+
+		const defaultChartInitialized = ({ chartEngine }: { chartEngine: any }) => {
+			Object.assign(window, { stx: chartEngine, CIQ })
+		}
+
+		const initialized = props.chartInitialized || defaultChartInitialized
+
+		return {
+			// eslint-disable-next-line vue/no-dupe-keys
+			config,
+			// eslint-disable-next-line vue/no-dupe-keys
+			resources,
+			initialized
+		}
 	}
 })
-export default class AdvancedWrapper extends Vue {
-	@Prop({ type: String, default: '' }) symbol!: string
-	@Prop({ type: String, default: '_advanced-chart' }) chartId!: string
-	@Prop({ type: Boolean, default: true }) restore!: boolean
-	@Prop({ type: Function, default: ({}) => {} }) onChartReady!: (
-		stx: CIQ.ChartEngine
-	) => {}
-
-	config: any
-
-	constructor() {
-		super()
-
-		const { symbol, chartId, onChartReady, restore } = this
-		this.config = getCustomConfig({ symbol, chartId, onChartReady, restore })
-	}
-
-	chartInitialized({
-		/* eslint-disable */
-		chartEngine,
-		uiContext,
-		config
-		/* esllint-enable */
-	}: {
-		chartEngine: CIQ.ChartEngine
-		uiContext: CIQ.UI.Context
-		config: any
-	}) {
-		// Methods for capturing state changes in chart engine and UI
-		// 	Channel subscribe example to listen to breakpoint changes
-		// 	const { channels } = config
-		// 	const channelSubscribe = CIQ.UI.BaseComponent.prototype.channelSubscribe
-		// 	channelSubscribe(
-		// 		channels.breakpoint,
-		// 		(value: any) => {
-		// 			console.log('channels.breakpoint', value)
-		// 		},
-		// 		chartEngine
-		// 	)
-		// Layout listener example, see parameters at https://documentation.chartiq.com/global.html#layoutEventListener
-		// uiContext.stx.addEventListener('layout', ({ layout }: any) => {
-		// 	console.log('layout changed', layout)
-		// })
-		// Simulate L2 data using https://documentation.chartiq.com/CIQ.ChartEngine.html#updateCurrentMarketData
-		// Requires import 'chartiq/examples/feeds/L2_simulator'
-		// CIQ.simulateL2({ stx: chartEngine, onInterval: 1000, onTrade: true })
-	}
-}
 </script>

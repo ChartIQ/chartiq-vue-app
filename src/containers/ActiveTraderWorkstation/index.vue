@@ -1,10 +1,9 @@
 <template>
 	<cq-context ref="container">
 		<cq-chart-instructions role="contentinfo"></cq-chart-instructions>
-
-		<!--  Begin Navbar -->
+		<!-- Begin Navbar -->
 		<div class="ciq-nav full-screen-hide" role="navigation">
-			<!-- enables the more button when in break-sm mode -->
+			<!-- Enables the more button when in break-sm mode -->
 			<div class="sidenav-toggle ciq-toggles">
 				<cq-toggle
 					class="ciq-sidenav"
@@ -16,7 +15,6 @@
 					icon="morenav"
 				></cq-toggle>
 			</div>
-
 			<cq-toggle
 				class="ciq-lookup-icon"
 				config="symbolsearch"
@@ -34,7 +32,6 @@
 				help-id="add_comparison"
 				comparison="true"
 			></cq-toggle>
-
 			<!-- any entry in this div will be shown in the side navigation bar in break-sm mode -->
 			<cq-side-nav cq-on="sidenavOn">
 				<div class="icon-toggles ciq-toggles">
@@ -82,7 +79,6 @@
 					></cq-toggle>
 				</div>
 			</cq-side-nav>
-
 			<div class="ciq-menu-section">
 				<div class="ciq-dropdowns">
 					<cq-menu
@@ -106,7 +102,7 @@
 						config="views"
 						text="Views"
 						icon="views"
-						responsive=""
+						responsive
 						tooltip="Views"
 					></cq-menu>
 					<cq-menu
@@ -115,7 +111,7 @@
 						config="studies"
 						text="Studies"
 						icon="studies"
-						responsive=""
+						responsive
 						tooltip="Studies"
 					></cq-menu>
 					<cq-menu
@@ -123,7 +119,7 @@
 						config="markers"
 						text="Events"
 						icon="events"
-						responsive=""
+						responsive
 						tooltip="Events"
 					></cq-menu>
 					<cq-menu
@@ -138,7 +134,6 @@
 			</div>
 		</div>
 		<!-- End Navbar -->
-
 		<div class="ciq-chart-area" role="main">
 			<div chartarea="true">
 				<div id="flexContainer">
@@ -154,14 +149,14 @@
 										<div></div>
 									</div>
 								</cq-tradehistory-table>
-								<template-placeholder>
+								<template>
 									<cq-item>
 										<div col="time">Time</div>
 										<div col="qty">Qty</div>
 										<div col="price">Price</div>
 										<div col="amount">Amount</div>
 									</cq-item>
-								</template-placeholder>
+								</template>
 							</cq-tradehistory>
 						</div>
 					</div>
@@ -171,7 +166,6 @@
 							<cq-orderbook cq-active></cq-orderbook>
 						</div>
 					</div>
-
 					<div
 						id="mainChartGroup"
 						packager-append-child="div.ciq-chart-area div.ciq-chart"
@@ -182,7 +176,6 @@
 								default-transition="slide"
 								default-position="top"
 							></cq-message-toaster>
-
 							<cq-palette-dock>
 								<div class="palette-dock-container">
 									<cq-drawing-palette
@@ -203,7 +196,6 @@
 									></cq-drawing-settings>
 								</div>
 							</cq-palette-dock>
-
 							<div class="chartContainer">
 								<!-- tooltip markup is required only if addon tooltip is used and customization is required -->
 								<table class="hu-tooltip">
@@ -225,13 +217,11 @@
 										</tr>
 									</tbody>
 								</table>
-
 								<cq-chart-title
 									cq-marker
 									cq-browser-tab
 									cq-activate-symbol-search-on-click
 								></cq-chart-title>
-
 								<!-- Full-screen icons -->
 								<cq-marker class="chart-control-group full-screen-show">
 									<cq-toggle
@@ -281,7 +271,6 @@
 										binding="Layout.periodicity"
 									></cq-menu>
 								</cq-marker>
-
 								<cq-study-legend
 									class="hovershow"
 									marker-label="Signals"
@@ -297,7 +286,6 @@
 									series="true"
 									cq-marker
 								></cq-study-legend>
-
 								<cq-loader></cq-loader>
 							</div>
 						</div>
@@ -305,13 +293,10 @@
 				</div>
 			</div>
 		</div>
-
 		<!-- Markers/Events -->
 		<cq-abstract-marker cq-type="helicopter"></cq-abstract-marker>
-
 		<!-- Attribution component -->
 		<cq-attribution></cq-attribution>
-
 		<!-- Begin Footer -->
 		<div role="complementary" class="ciq-footer full-screen-hide">
 			<cq-share-button
@@ -345,24 +330,19 @@
 			></cq-show-range>
 		</div>
 		<!-- End Footer -->
-
 		<cq-dialogs>
 			<cq-dialog>
 				<cq-drawing-context></cq-drawing-context>
 			</cq-dialog>
-
 			<cq-dialog>
 				<cq-study-context></cq-study-context>
 			</cq-dialog>
 		</cq-dialogs>
-
 		<cq-side-panel></cq-side-panel>
 	</cq-context>
 </template>
-
 <script lang="ts">
-import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
-// @ts-ignore
+import { defineComponent, ref, onMounted, onBeforeUnmount, PropType } from 'vue'
 import { CIQ } from 'chartiq/js/componentUI'
 import { getConfig } from './resources' // ChartIQ library resources
 
@@ -370,208 +350,246 @@ const { channelWrite } = CIQ.UI.BaseComponent.prototype
 
 const initialSymbol = '^USDAUD'
 
-@Component({})
-export default class ActiveTraderComponent extends Vue {
-	@Prop() config: any
-	@Prop({ type: String, default: '^USDAUD' }) symbol!: string
-	@Prop({ type: String, default: '_custom-chart' }) chartId!: string
-	@Prop({ type: Function, default: ({}) => {} }) chartInitialized!: Function
+export default defineComponent({
+	props: {
+		config: {
+			type: Object as PropType<any>,
+			required: false
+		},
+		symbol: {
+			type: String,
+			default: '^USDAUD'
+		},
+		chartId: {
+			type: String,
+			default: '_active_trader_workstation'
+		},
+		chartInitialized: {
+			type: Function,
+			default: () => {}
+		}
+	},
+	setup(props: any) {
+		const container = ref<HTMLElement | null>(null)
+		let stx: CIQ.ChartEngine | undefined
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		let uiContext: CIQ.UI.Context | undefined
+		let moneyFlowChart: CIQ.Visualization | undefined
 
-	@Ref('container') container!: HTMLElement
+		onMounted(() => {
+			let config = props.config
+			if (!config) {
+				config = getConfig()
+				config.chartId = props.chartId
 
-	stx: CIQ.ChartEngine | undefined
-	uiContext: CIQ.UI.Context | undefined
-	moneyFlowChart: CIQ.Visualization | undefined
+				// Customize configuration prior to passing it as parameter chart creation
+				config.initialSymbol = props.symbol || initialSymbol
+				// config.quoteFeeds[0].behavior.refreshInterval = 0
+				// config.enabledAddOns.continuousZoom = true
+				config.enabledAddOns.animation = true
 
-	mounted() {
-		let config = this.config
-		if (!config) {
-			config = getConfig()
-			config.chartId = this.chartId
+				config.plugins.marketDepth = {
+					volume: true,
+					mountain: true,
+					step: true,
+					record: true,
+					height: '40%',
+					precedingContainer: '#marketDepthBookmark',
+					interaction: true
+				}
 
-			// Customize configuration prior to passing it as parameter chart creation
-			config.initialSymbol = this.symbol || initialSymbol
-			// config.quoteFeeds[0].behavior.refreshInterval = 0
-			// config.enabledAddOns.continuousZoom = true
-
-			config.plugins.marketDepth = {
-				volume: true,
-				mountain: true,
-				step: true,
-				record: true,
-				height: '40%',
-				precedingContainer: '#marketDepthBookmark',
-				interaction: true
+				config.addOns.tableView.coverContainer = '.ciq-chart-area'
 			}
 
-			config.menus.preferences.content =
-				config.menus.preferences.content.filter(
-					(item: any) => item.label !== 'Extended Hours'
-				)
+			// Delay the call to createChartAndUI so any other AdvancedChart components on the page
+			window.setTimeout(async () => {
+				const uiCtx = await createChartAndUI(config)
+				if (!uiCtx) return
+				cryptoSetup(uiCtx.stx)
+				if ('d3' in window) {
+					setUpMoneyFlowChart(uiCtx.stx)
+				} else {
+					CIQ.loadScript('https://d3js.org/d3.v5.min.js', () => {
+						setUpMoneyFlowChart(uiCtx.stx)
+					})
+				}
 
-			config.addOns.tableView.coverContainer = '.ciq-chart-area'
+				// Request TFC channel open
+				channelWrite(config.channels.tfc, true, uiCtx.stx)
+				props.chartInitialized({
+					chartEngine: uiCtx.stx,
+					uiContext: uiCtx,
+					config
+				})
+			}, 0)
+		})
+
+		onBeforeUnmount(() => {
+			// Destroy the ChartEngine instance when unloading the component.
+			// This will stop internal processes such as quotefeed polling.
+			if (moneyFlowChart) moneyFlowChart.destroy(false)
+			stx?.destroy()
+		})
+
+		async function createChartAndUI(config: any) {
+			const chart = new CIQ.UI.Chart()
+			const uiCtx = chart.createChartAndUI({
+				// @ts-ignore
+				container: container.value,
+				config
+			})
+			stx = uiCtx.stx
+			uiContext = uiCtx
+
+			// Channel subscribe
+			// const { channels } = config
+			// const channelSubscribe = CIQ.UI.BaseComponent.prototype.channelSubscribe
+			// channelSubscribe(
+			// 	channels.breakpoint,
+			// 	(value: any) => {
+			// 		console.log('channels.breakpoint', value)
+			// 	},
+			// 	uiContext.stx
+			// )
+
+			// Create layout listener, see parameters at https://documentation.chartiq.com/global.html#layoutEventListener
+			// uiContext.stx.addEventListener('layout', ({ layout }: any) => {
+			// 	console.log('layout changed', layout)
+			// })
+
+			return uiCtx
 		}
 
-		// Delay the call to createChartAndUI so any other AdvancedChart components on the page
-		// have a chance to call portalizeContextDialogs
-		window.setTimeout(async () => {
-			const uiContext = await this.createChartAndUI(config)
+		function cryptoSetup(stx: any) {
+			stx.setChartType('line')
+			CIQ.extend(stx.layout, {
+				crosshair: true,
+				headsUp: { static: true },
+				l2heatmap: true,
+				rangeSlider: true,
+				marketDepth: true,
+				extended: false
+			})
+			stx.changeOccurred('layout')
 
-			this.cryptoSetup(uiContext.stx)
-			if ('d3' in window) {
-				this.setUpMoneyFlowChart(uiContext.stx)
-			} else {
-				CIQ.loadScript('https://d3js.org/d3.v5.min.js', () => {
-					this.setUpMoneyFlowChart(uiContext.stx)
+			// Simulate L2 data using https://documentation.chartiq.com/CIQ.ChartEngine.html#updateCurrentMarketData
+			CIQ.simulateL2({ stx, onInterval: 1000, onTrade: true })
+		}
+
+		function setUpMoneyFlowChart(stx: any) {
+			moneyFlowChart = moneyFlowChartFunction(stx)
+
+			function moneyFlowChartFunction(stx: any) {
+				const initialPieData = {
+					Up: { index: 1 },
+					Down: { index: 2 },
+					Even: { index: 3 }
+				}
+
+				const pieChart = new CIQ.Visualization({
+					container: 'cq-tradehistory-table div[pie-chart] div',
+					renderFunction: CIQ.SVGChart.renderPieChart,
+					colorRange: ['#8cc176', '#b82c0c', '#7c7c7c'],
+					className: 'pie',
+					valueFormatter: CIQ.condenseInt
+				}).updateData(CIQ.clone(initialPieData))
+
+				let last: any = null
+				stx.append(
+					'updateCurrentMarketData',
+					(data: any, chart: any, symbol: string) => {
+						if (symbol) {
+							return
+						}
+						const items = document.querySelectorAll(
+							'cq-tradehistory-body cq-item'
+						)
+
+						const d: any = {}
+						let i = 0
+						for (i = 0; i < items.length; i++) {
+							const item = items[i]
+							if (item === last) break
+							let dir = item.getAttribute('dir') as string
+							if (!dir) {
+								dir = 'even'
+							}
+							dir = CIQ.capitalize(dir)
+							if (!d[dir]) {
+								d[dir] = 0
+							}
+							d[dir] += parseFloat(
+								(item.querySelector('[col=amount]') as Element).getAttribute(
+									'rawval'
+								) as string
+							)
+						}
+
+						if (i) {
+							pieChart.updateData(d, 'add')
+						}
+						last = items[0]
+					}
+				)
+				stx.addEventListener('symbolChange', () => {
+					pieChart.updateData(CIQ.clone(initialPieData))
+				})
+
+				return pieChart
+			}
+		}
+
+		// Decorate the library function to avoid copying html2canvas.min.js to distribution to js/thirdparty directory
+		/* ;(function initDynamicShare() {
+			// @ts-ignore
+			if (CIQ.Share.fullChart2PNG_init) return
+			// @ts-ignore
+			const fullChart2PNG = CIQ.Share.fullChart2PNG
+			// @ts-ignore
+			CIQ.Share.fullChart2PNG = function (stx, params, cb) {
+				// @ts-ignore
+				import('chartiq/js/thirdparty/html2canvas.min.js').then(() => {
+					fullChart2PNG(stx, params, cb)
 				})
 			}
+			// @ts-ignore
+			CIQ.Share.fullChart2PNG_init = true
+		})() */
 
-			// Request TFC channel open
-			channelWrite(config.channels.tfc, true, uiContext.stx)
-			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })
-		}, 0)
-	}
-
-	beforeDestroy() {
-		// Destroy the ChartEngine instance when unloading the component.
-		// This will stop internal processes such as quotefeed polling.
-		if (this.moneyFlowChart) this.moneyFlowChart.destroy(false)
-		this.stx?.destroy()
-	}
-
-	async createChartAndUI(config: any) {
-		const chart = new CIQ.UI.Chart()
-		const container = this.container
-
-		const uiContext = chart.createChartAndUI({ container, config })
-
-		this.stx = uiContext.stx
-		this.uiContext = uiContext
-
-		// Channel subscribe
-		// const { channels } = config
-		// const channelSubscribe = CIQ.UI.BaseComponent.prototype.channelSubscribe
-		// channelSubscribe(
-		// 	channels.breakpoint,
-		// 	(value: any) => {
-		// 		console.log('channels.breakpoint', value)
-		// 	},
-		// 	uiContext.stx
-		// )
-
-		// Create layout listener, see parameters at https://documentation.chartiq.com/global.html#layoutEventListener
-		// uiContext.stx.addEventListener('layout', ({ layout }: any) => {
-		// 	console.log('layout changed', layout)
-		// })
-
-		return uiContext
-	}
-
-	cryptoSetup(stx: any) {
-		stx.setChartType('line')
-		CIQ.extend(stx.layout, {
-			crosshair: true,
-			headsUp: { static: true },
-			l2heatmap: true,
-			rangeSlider: true,
-			marketDepth: true,
-			extended: false
-		})
-		stx.changeOccurred('layout')
-
-		// Simulate L2 data using https://documentation.chartiq.com/CIQ.ChartEngine.html#updateCurrentMarketData
-		CIQ.simulateL2({ stx, onInterval: 1000, onTrade: true })
-	}
-
-	setUpMoneyFlowChart(stx: any) {
-		this.moneyFlowChart = moneyFlowChart(stx)
-
-		function moneyFlowChart(stx: any) {
-			const initialPieData = {
-				Up: { index: 1 },
-				Down: { index: 2 },
-				Even: { index: 3 }
-			}
-
-			const pieChart = new CIQ.Visualization({
-				container: 'cq-tradehistory-table div[pie-chart] div',
-				renderFunction: CIQ.SVGChart.renderPieChart,
-				colorRange: ['#8cc176', '#b82c0c', '#7c7c7c'],
-				className: 'pie',
-				valueFormatter: CIQ.condenseInt
-			}).updateData(CIQ.clone(initialPieData))
-
-			let last: any = null
-			stx.append(
-				'updateCurrentMarketData',
-				(data: any, chart: any, symbol: string /* , params: any */) => {
-					if (symbol) {
-						return
-					}
-					const items = document.querySelectorAll(
-						'cq-tradehistory-body cq-item'
-					)
-
-					const d: any = {}
-					let i = 0
-					for (i = 0; i < items.length; i++) {
-						const item = items[i]
-						if (item === last) break
-						let dir = item.getAttribute('dir') as string
-						if (!dir) {
-							dir = 'even'
-						}
-						dir = CIQ.capitalize(dir)
-						if (!d[dir]) {
-							d[dir] = 0
-						}
-						d[dir] += parseFloat(
-							(item.querySelector('[col=amount]') as Element).getAttribute(
-								'rawval'
-							) as string
-						)
-					}
-
-					if (i) {
-						pieChart.updateData(d, 'add')
-					}
-					last = items[0]
-				}
-			)
-			stx.addEventListener('symbolChange', () => {
-				pieChart.updateData(CIQ.clone(initialPieData))
-			})
-
-			return pieChart
+		return {
+			container
 		}
 	}
-}
+})
 </script>
-
-<style lang="scss" scoped>
+<style lang="scss">
 #flexContainer {
 	position: absolute;
 	top: -15px;
 	bottom: 5px;
 	left: 0;
 	right: 0;
+	display: flex;
 	overflow: hidden;
 	padding: 10px 0;
+	gap: 10px;
 }
-#cryptoGroup1,
-#cryptoGroup2 {
-	float: left;
-	width: 15%;
+#cryptoGroup1 {
+	flex: 0 0 15%;
 	height: 100%;
-	padding: 5px 5px 10px;
+	padding: 5px;
+	box-sizing: border-box;
 }
 #cryptoGroup2 {
-	width: 25%;
+	flex: 0 0 25%;
+	height: 100%;
+	padding: 5px;
+	box-sizing: border-box;
 }
 #mainChartGroup {
+	flex: 1;
 	display: flex;
 	flex-direction: column;
-	display: grid; /* A better model, if browser supports. */
 	height: 100%;
 	padding: 10px;
 }
@@ -587,8 +605,6 @@ cq-orderbook,
 cq-tradehistory {
 	position: relative !important;
 }
-
-/* Money Flow chart */
 div[pie-chart] {
 	height: 150px;
 	width: 100%;
@@ -596,27 +612,30 @@ div[pie-chart] {
 	padding-bottom: 15px;
 	font-weight: bold;
 	text-align: center;
+	box-sizing: border-box;
+	> span {
+		display: inline-block;
+		margin-top: 10px;
+	}
+	> div {
+		height: 100%;
+		width: 100%;
+	}
 }
 .ciq-night div[pie-chart] {
 	background-color: #1c2a35;
 }
-div[pie-chart] > div {
-	height: 100%;
-	width: 100%;
-}
-.div[pie-chart] {
-	.pie {
-		text-anchor: middle;
-		fill: black;
-	}
-	.pie text .name {
+:deep(.pie) {
+	text-anchor: middle;
+	fill: black;
+	text .name {
 		font-weight: bold;
 	}
-	.pie text .value {
+	text .value {
 		font-weight: normal;
 	}
 }
-.ciq-night::v-deep .pie {
+.ciq-night :deep(.pie) {
 	fill: white;
 }
 </style>

@@ -20,27 +20,24 @@
 				</p>
 			</li>
 			<li>
-				<h3>Multi-chart</h3>
-				<p>Coming soon.</p>
+				<h3>
+					<router-link to="/multi-chart">MultiChart</router-link>
+				</h3>
+				<p>Displays multiple charts with a shared header and footer.</p>
 			</li>
 			<li>
-				<h3
-					v-if="ActiveTraderWorkstationEnabled === false"
-					class="disabled-link"
-					style="color: #999; margin-bottom: 0"
-				>
+				<h3 v-if="!activeTraderEnabled" style="color: #999; margin-bottom: 0">
 					Active Trader
 				</h3>
 				<p
-					v-if="ActiveTraderWorkstationEnabled === false"
-					class="disabled-link"
+					v-if="!activeTraderEnabled"
 					style="font-size: 0.7rem; margin-top: 0; margin-bottom: 0.7rem"
 				>
 					(To enable this link, uncomment all lines following the
 					<code>// Enable ActiveTraderWorkstation</code> comment in the
 					<i>router/index.ts</i> file.)
 				</p>
-				<h3 v-if="ActiveTraderWorkstationEnabled === true">
+				<h3 v-if="activeTraderEnabled">
 					<router-link to="/active-trader">Active Trader</router-link>
 				</h3>
 				<p>
@@ -72,18 +69,15 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
-@Component({})
-export default class Home extends Vue {
-	get ActiveTraderWorkstationEnabled(): boolean {
-		return (
-			this.$router.options.routes?.find((r) => r.path === '/active-trader') !==
-			undefined
-		)
-	}
-}
+const router = useRouter()
+
+const activeTraderEnabled = computed(() => {
+	return router.options.routes?.some((route) => route.path === '/active-trader')
+})
 </script>
 
 <style lang="scss" scoped>
@@ -140,7 +134,7 @@ i {
 
 h3.disabled-link div {
 	font-size: 0.8em;
-	padding-left: 6p;
+	padding-left: 6px;
 	font-weight: normal;
 }
 </style>

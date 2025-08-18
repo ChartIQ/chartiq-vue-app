@@ -2,8 +2,12 @@
 	"compilerOptions": {
 		"target": "esnext",
 		"module": "esnext",
+		"outDir": "./dist",
 		"strict": true,
 		"jsx": "preserve",
+		//Setting "forceConsistentCasingInFileNames": true is a best practice that helps ensure that your 
+		// TypeScript project maintains consistent file naming conventions, reducing the bugs and improving code quality.
+		"forceConsistentCasingInFileNames": true,
 		"allowJs": true,
 		"checkJs": false,
 		"importHelpers": true,
@@ -23,9 +27,8 @@
 	"include": [
 		"src/**/*.ts",
 		"src/**/*.tsx",
-		"src/**/*.vue",
 		"tests/**/*.ts",
 		"tests/**/*.tsx"
 	],
-	"exclude": ["node_modules"]
+"exclude": ["node_modules"]
 }

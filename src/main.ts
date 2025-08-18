@@ -5,7 +5,8 @@
  *
  * The second one (commented out) is an example of an application based on a single "Advanced Chart" template.
  */
-import Vue from 'vue'
+import { createApp } from 'vue'
+//import { createApp } from 'vue/dist/vue.esm-bundler.js';
 import router from './router'
 
 /**
@@ -16,21 +17,26 @@ import './testInitialization'
 
 import AppAllTemplates from './App.vue'
 
-Vue.config.productionTip = false
+const app = createApp(AppAllTemplates)
 
-Vue.config.ignoredElements = [/^cq-.*$/, /^stx-.*$/]
-
-// Workaround to be able to use the HTML template element in Vue template
-Vue.component('template-placeholder', {
-	render: function (createElement) {
-		return createElement('template', this.$slots.default)
+app.mixin({
+	mounted() {
+		window.onpopstate = function () {
+			location.reload()
+		}
 	}
 })
 
-new Vue({
-	router,
-	render: (h) => h(AppAllTemplates)
-}).$mount('#app')
+// Workaround to be able to use the HTML template element in Vue template
+app.component('template-placeholder', {
+	render(this: any): any {
+		return this.$slots.default ? this.$slots.default() : null
+	}
+})
+
+app.use(router)
+
+app.mount('#app')
 
 /*
 

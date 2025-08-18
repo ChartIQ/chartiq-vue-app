@@ -328,250 +328,237 @@
 	</cq-context>
 </template>
 
+<script lang="ts">
+import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue'
+import { CIQ } from 'chartiq/js/componentUI'
+import { getConfig } from './resources' // ChartIQ library resources
+import ShortcutDialogComponent from './ShortcutDialog.vue'
+
+export default defineComponent({
+	components: {
+		ShortcutDialogComponent
+	},
+	props: {
+		config: {
+			type: Object,
+			default: () => getConfig()
+		},
+		symbol: {
+			type: String,
+			default: ''
+		},
+		chartId: {
+			type: String,
+			default: '_custom-chart'
+		},
+		chartInitialized: {
+			type: Function,
+			default: () => {}
+		}
+	},
+	setup(props) {
+		const container = ref<HTMLElement | null>(null)
+		const dialog = ref('')
+		let stx: CIQ.ChartEngine | undefined
+		let uiContext: CIQ.UI.Context | undefined
+		const store = new CIQ.NameValueStore()
+		const symbolStorageName = 'recentSymbols'
+		const shortcutStorageName = 'customDrawingToolShortcuts'
+		const drawingToolDetails: { [key: string]: string } = {
+			annotation: `
+				Add text annotations to your chart.
+			`,
+			elliottwave: `
+				The Elliott Wave Theory was developed by Ralph Nelson Elliott to describe...
+			  `.trim()
+		}
+
+		const updateCustomization = async (config: any) => {
+			// currently only tool shortcuts are customized locally
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
+			const shortcuts = await getValue(shortcutStorageName)
+			if (!shortcuts || !Object.keys(shortcuts).length) return
+
+			config.drawingTools.forEach((item: any) => {
+				item.shortcut = shortcuts[item.tool] || ''
+			})
+		}
+
+		const getRecentSymbols = async () => {
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
+			return await getValue(symbolStorageName)
+		}
+
+		const updateRecentSymbols = (value: any) => {
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
+			setValue(symbolStorageName, value)
+		}
+
+		const getValue = (name: string) => {
+			return new Promise<any>((resolve, reject) => {
+				store.get(name, (err: any, value: any) => {
+					if (err) return reject(err)
+					resolve(value || {})
+				})
+			})
+		}
+
+		const setValue = (name: string, value: any) => {
+			return new Promise<any>((resolve, reject) => {
+				store.set(name, value, (err: any) => {
+					if (err) return reject(err)
+					resolve(value)
+				})
+			})
+		}
+
+		const updateSymbolStore = async (
+			symbol: string,
+			{ name = '', exchDisp = '' } = {}
+		) => {
+			const list = await getRecentSymbols()
+			const count = ((list[symbol] && list[symbol].count) || 0) + 1
+			list[symbol] = { symbol, name, exchDisp, count, last: +new Date() }
+			return updateRecentSymbols(list)
+		}
+
+		async function createChartAndUI(config: any) {
+			const chart = new CIQ.UI.Chart()
+			const containerElement = container.value as HTMLElement
+
+			uiContext = chart.createChartAndUI({
+				container: containerElement,
+				config
+			})
+			// @ts-ignore
+			stx = uiContext.stx
+			await updateCustomization(config)
+
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
+			postInit()
+		}
+
+		const postInit = () => {
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
+			addPreferencesHelper()
+
+			const isForecasting = (symbol: string) => /_fcst$/.test(symbol)
+			stx?.addEventListener(
+				'symbolChange',
+				({ symbol, symbolObject, action }: { [x: string]: any }) => {
+					if (
+						!isForecasting(symbol) &&
+						(action === 'master' || action === 'add-series')
+					) {
+						updateSymbolStore(symbol, symbolObject)
+					}
+				}
+			)
+		}
+
+		const addPreferencesHelper = () => {
+			const layoutHelper = uiContext?.getAdvertised('Layout')
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
+			layoutHelper.openPreferences = (node: any, type: any) => openDialog(type)
+		}
+
+		const openDialog = (name: string) => {
+			dialog.value = name
+		}
+
+		const closeDialog = () => {
+			dialog.value = ''
+		}
+
+		const getDrawingTools = () => {
+			const { drawingToolDetails: details } = drawingToolDetails
+			return uiContext?.config.drawingTools.map(
+				({ label, shortcut, tool }: { [x: string]: any }) => {
+					return {
+						label,
+						tool,
+						shortcut: shortcut || '',
+						detail: details && details[tool]
+					}
+				}
+			)
+		}
+
+		const setDrawingToolShortcuts = (shortcuts: any) => {
+			if (!uiContext) return
+			const { config, topNode } = uiContext || {}
+
+			config.drawingTools.forEach((item: any) => {
+				item.shortcut = shortcuts[item.tool]
+			})
+
+			setValue(shortcutStorageName, shortcuts)
+
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
+			if (topNode) {
+				// eslint-disable-next-line @typescript-eslint/no-use-before-define
+				rebuildDrawingPalette(topNode)
+			}
+		}
+
+		const rebuildDrawingPalette = (el: HTMLElement) => {
+			const qs = (path: string) => el.querySelector(path) as Element
+			const container = qs('.palette-dock-container')
+			const palette = qs('cq-drawing-palette') as any
+			const newPalette = document.createElement('cq-drawing-palette')
+
+			newPalette.className = palette.className
+			newPalette.setAttribute(
+				'docked',
+				palette.getAttribute('docked') as string
+			)
+			newPalette.setAttribute(
+				'orientation',
+				palette.getAttribute('orientation') as string
+			)
+			newPalette.setAttribute(
+				'min-height',
+				palette.getAttribute('min-height') as string
+			)
+			const noOp = () => {}
+			palette.keyStroke = palette.handleMessage = noOp
+			palette.remove()
+
+			container.appendChild(newPalette)
+		}
+
+		onMounted(() => {
+			const config = props.config
+			config.chartId = props.chartId
+			config.initialSymbol = props.symbol || {
+				symbol: 'AAPL',
+				name: 'Apple Inc',
+				exchDisp: 'NASDAQ'
+			}
+
+			createChartAndUI(config)
+		})
+
+		onBeforeUnmount(() => {
+			// Destroy the ChartEngine instance when unloading the component.
+			// This will stop internal processes such as quotefeed polling.
+			stx?.destroy()
+		})
+
+		return {
+			container,
+			dialog,
+			getDrawingTools,
+			setDrawingToolShortcuts,
+			openDialog,
+			closeDialog
+		}
+	}
+})
+</script>
+
 <style lang="scss">
 cq-dialog {
 	top: 0;
 }
 </style>
-
-<script lang="ts">
-import { Component, Prop, Provide, Ref, Vue } from 'vue-property-decorator'
-// @ts-ignore
-import { CIQ } from 'chartiq/js/componentUI'
-import { getConfig } from './resources' // ChartIQ library resources
-import ShortcutDialogComponent from './ShortcutDialog.vue'
-
-@Component({
-	components: {
-		ShortcutDialogComponent
-	}
-})
-export default class CustomChartComponent extends Vue {
-	@Prop({ default: () => getConfig() }) config!: any
-	@Prop({ type: String, default: '' }) symbol!: string
-	@Prop({ type: String, default: '_custom-chart' }) chartId!: string
-	@Prop({ type: Function, default: ({}) => {} }) chartInitialized!: Function
-
-	@Ref('container') container!: HTMLElement
-
-	@Provide() dialog = ''
-	drawingToolDetails = {
-		elliottwave: `
-      The Elliott Wave Theory was developed by Ralph Nelson Elliott to describe...
-    `.trim()
-	}
-
-	stx: CIQ.ChartEngine | undefined
-	uiContext: CIQ.UI.Context | undefined
-	private store = new CIQ.NameValueStore()
-	private symbolStorageName = 'recentSymbols'
-	private shortcutStorageName = 'customDrawingToolShortcuts'
-
-	mounted() {
-		const config = this.config
-		config.chartId = this.chartId
-		config.initialSymbol = this.symbol || {
-			symbol: 'AAPL',
-			name: 'Apple Inc',
-			exchDisp: 'NASDAQ'
-		}
-
-		// Delay the call to createChartAndUI so any other AdvancedChart components on the page
-		// have a chance to call portalizeContextDialogs
-		window.setTimeout(() => {
-			this.createChartAndUI(config)
-		}, 0)
-	}
-
-	beforeDestroy() {
-		// Destroy the ChartEngine instance when unloading the component.
-		// This will stop internal processes such as quotefeed polling.
-		this.stx?.destroy()
-	}
-
-	async createChartAndUI(config: any) {
-		const chart = new CIQ.UI.Chart()
-		const container = this.container
-
-		const uiContext = chart.createChartAndUI({
-			container,
-			config
-		})
-		this.uiContext = uiContext
-		this.stx = uiContext.stx
-
-		await this.updateCustomization(config)
-
-		await this.postInit(container)
-	}
-
-	postInit(container: HTMLElement) {
-		this.addPreferencesHelper()
-		portalizeContextDialogs(container)
-
-		const isForecasting = (symbol: string) => /_fcst$/.test(symbol)
-		this.stx?.addEventListener(
-			'symbolChange',
-			({ symbol, symbolObject, action }: { [x: string]: any }) => {
-				if (
-					!isForecasting(symbol) &&
-					(action === 'master' || action === 'add-series')
-				) {
-					this.updateSymbolStore(symbol, symbolObject)
-				}
-			}
-		)
-	}
-
-	async updateCustomization(config: any): Promise<void> {
-		// currently only tool shortcuts are customized locally
-		const shortcuts = await this.getValue(this.shortcutStorageName)
-		if (!shortcuts || !Object.keys(shortcuts).length) {
-			return
-		}
-		config.drawingTools.forEach((item: any) => {
-			item.shortcut = shortcuts[item.tool] || ''
-		})
-	}
-
-	async updateSymbolStore(symbol: string, { name = '', exchDisp = '' } = {}) {
-		const list = await this.getRecentSymbols()
-		const count = ((list[symbol] && list[symbol].count) || 0) + 1
-		list[symbol] = { symbol, name, exchDisp, count, last: +new Date() }
-		return this.updateRecentSymbols(list)
-	}
-
-	@Provide() getRecentSymbols(): Promise<
-		Record<
-			string,
-			{
-				symbol: string
-				name: string
-				exchDisp: string
-				last: number
-				count: number
-			}
-		>
-	> {
-		return this.getValue(this.symbolStorageName)
-	}
-
-	updateRecentSymbols(value: any) {
-		return this.setValue(this.symbolStorageName, value)
-	}
-
-	getValue(name: string): Promise<any> {
-		return new Promise((resolve, reject) => {
-			this.store.get(name, (err: any, value: any) => {
-				if (err) return reject(err)
-				resolve(value || {})
-			})
-		})
-	}
-
-	setValue(name: string, value: any): Promise<any> {
-		return new Promise((resolve, reject) => {
-			this.store.set(name, value, (err: any) => {
-				if (err) return reject(err)
-				resolve(value)
-			})
-		})
-	}
-
-	addPreferencesHelper() {
-		const layoutHelper = this.uiContext?.getAdvertised('Layout')
-		layoutHelper.openPreferences = (node: any, type: any) =>
-			this.openDialog(type)
-	}
-
-	@Provide() getDrawingTools(): {
-		label: string
-		tool: string
-		shortcut: string
-		detail: string
-	}[] {
-		const { drawingToolDetails: details } = this
-
-		return this.uiContext?.config.drawingTools.map(
-			({ label, shortcut, tool }: { [x: string]: any }) => {
-				return {
-					label,
-					tool,
-					shortcut: shortcut || '',
-					// @ts-ignore
-					detail: details[tool]
-				}
-			}
-		)
-	}
-
-	@Provide() setDrawingToolShortcuts(shortcuts: any) {
-		if (!this.uiContext) return
-		const { config, topNode } = this.uiContext
-
-		config.drawingTools.forEach((item: any) => {
-			item.shortcut = shortcuts[item.tool]
-		})
-
-		this.setValue(this.shortcutStorageName, shortcuts)
-
-		rebuildDrawingPalette(topNode)
-	}
-
-	@Provide() openDialog(name: string) {
-		this.dialog = name
-	}
-
-	closeDialog() {
-		this.dialog = ''
-	}
-}
-
-/**
- * For applications that have more then one chart, keep single dialog of the same type
- * and move it outside context node to be shared by all chart components
- */
-function portalizeContextDialogs(container: HTMLElement) {
-	container.querySelectorAll('cq-dialog').forEach((dialog) => {
-		dialog.remove()
-		if (!dialogPortalized(dialog)) {
-			document.body.appendChild(dialog)
-		}
-	})
-}
-
-function dialogPortalized(el: Element) {
-	if (!el.firstChild) {
-		throw new Error('Element has no children')
-	}
-
-	const tag = el.firstChild.nodeName.toLowerCase()
-	return Array.from(document.querySelectorAll(tag)).some(
-		(el) => !el.closest('cq-context')
-	)
-}
-
-function rebuildDrawingPalette(el: HTMLElement) {
-	const qs = (path: string) => el.querySelector(path) as Element
-	const container = qs('.palette-dock-container')
-	const palette = qs('cq-drawing-palette')
-	const newPalette = document.createElement('cq-drawing-palette')
-
-	newPalette.className = palette.className
-	newPalette.setAttribute('docked', palette.getAttribute('docked') as string)
-	newPalette.setAttribute(
-		'orientation',
-		palette.getAttribute('orientation') as string
-	)
-	newPalette.setAttribute(
-		'min-height',
-		palette.getAttribute('min-height') as string
-	)
-	const noOp = () => {}
-	// @ts-ignore
-	palette.keyStroke = palette.handleMessage = noOp
-	palette.remove()
-
-	container.appendChild(newPalette)
-}
-</script>

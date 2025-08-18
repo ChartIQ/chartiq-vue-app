@@ -20,7 +20,8 @@ module.exports = {
 		'no-empty-pattern': 'off',
 		'comma-dangle': ['error', 'only-multiline'],
 		'@typescript-eslint/ban-ts-comment': 'off',
-		'@typescript-eslint/ban-types': 'off'
+		'@typescript-eslint/ban-types': 'off',
+		'vue/multi-word-component-names': 'off'
 	},
 	parser: 'vue-eslint-parser',
 	parserOptions: {

@@ -5,26 +5,30 @@
 			<div class="content">
 				<div class="list">
 					<table>
-						<tr>
-							<td @click="sortBy('label')" title="Sort by label">Label</td>
-							<td @click="sortBy('shortcut')" title="Sort by shortcut">
-								Alt + Shortcut
-							</td>
-						</tr>
-						<tr v-for="item in drawingTools" :key="item.label">
-							<td class="label" @click="infoAbout(item.tool)">
-								{{ item.label }}
-							</td>
-							<td class="shortcut">
-								<input
-									type="text"
-									maxlength="1"
-									:value="item.shortcut"
-									@input="shortcutChanged(item.tool, $event)"
-									:class="[{ duplicate: item.duplicate }]"
-								/>
-							</td>
-						</tr>
+						<thead>
+							<tr>
+								<td @click="sortBy('label')" title="Sort by label">Label</td>
+								<td @click="sortBy('shortcut')" title="Sort by shortcut">
+									Alt + Shortcut
+								</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="item in drawingTools" :key="item.label">
+								<td class="label" @click="infoAbout(item.tool)">
+									{{ item.label }}
+								</td>
+								<td class="shortcut">
+									<input
+										type="text"
+										maxlength="1"
+										:value="item.shortcut"
+										@input="shortcutChanged(item.tool, $event)"
+										:class="[{ duplicate: item.duplicate }]"
+									/>
+								</td>
+							</tr>
+						</tbody>
 					</table>
 				</div>
 				<div class="detail">
@@ -42,98 +46,124 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { defineComponent, ref, onMounted } from 'vue'
 
-@Component({})
-export default class ShortcutDialogComponent extends Vue {
-	@Prop(Function) getDrawingTools!: Function
-	@Prop(Function) setDrawingToolShortcuts!: Function
-	@Prop(Function) closeDialog!: Function
+export default defineComponent({
+	props: {
+		getDrawingTools: {
+			type: Function,
+			required: true
+		},
+		setDrawingToolShortcuts: {
+			type: Function,
+			required: true
+		},
+		closeDialog: {
+			type: Function,
+			required: true
+		}
+	},
+	setup(props) {
+		const drawingTools = ref<
+			Array<{
+				label: string
+				tool: string
+				shortcut: string
+				duplicate?: boolean
+			}>
+		>([])
+		const selectedTool = ref<any>({})
 
-	drawingTools: {
-		label: string
-		tool: string
-		shortcut: string
-		duplicate?: boolean
-	}[] = []
-	selectedTool: any = {}
+		onMounted(() => {
+			drawingTools.value = props.getDrawingTools()
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
+			updateDuplicates()
+		})
 
-	mounted() {
-		this.drawingTools = this.getDrawingTools()
-		this.updateDuplicates()
-	}
+		const shortcutChanged = (tool: any, e: any) => {
+			if (e) {
+				e.stopPropagation()
+				e.preventDefault()
+			}
 
-	shortcutChanged(tool: any, e: any) {
-		if (e) {
-			e.stopPropagation()
-			e.preventDefault()
+			const shortcut = e.data
+			drawingTools.value
+				.filter((item) => item.tool === tool)
+				.map((item) => {
+					item.shortcut = shortcut
+				})
+
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
+			updateDuplicates()
 		}
 
-		const shortcut = e.data
-		this.drawingTools
-			.filter((item) => item.tool === tool)
-			.map((item) => {
-				item.shortcut = shortcut
+		const infoAbout = (tool: any) => {
+			selectedTool.value =
+				drawingTools.value.find((item) => item.tool === tool) || {}
+		}
+
+		const updateDuplicates = () => {
+			const tools = drawingTools.value
+			// find duplicates
+			const duplicates: Record<string, number[]> = tools.reduce(
+				(acc: any, item, index) => {
+					item.duplicate = false // clear duplicates
+					if (!item.shortcut) return acc
+					acc[item.shortcut] = (acc[item.shortcut] || []).concat(index)
+					return acc
+				},
+				{}
+			)
+
+			// mark duplicates
+			// eslint-disable-next-line
+      		Object.entries(duplicates).forEach(([shortcut, indexes]) => {
+				if (indexes.length > 1) {
+					indexes.forEach((index) => {
+						tools[index].duplicate = true
+					})
+				}
 			})
+		}
 
-		this.updateDuplicates()
+		const sortBy = (field: string) => {
+			drawingTools.value.sort((a: any, b: any) => {
+				const x1 = a[field]
+				const x2 = b[field]
+				if (!x1 && x2) return 1
+				if (!x2 && x1) return -1
+				return x1 > x2 ? 1 : -1
+			})
+		}
+
+		const onSave = () => {
+			const shortcuts = drawingTools.value
+				.filter((item) => item.shortcut)
+				.reduce((acc: any, item) => {
+					acc[item.tool] = item.shortcut
+					return acc
+				}, {})
+
+			props.setDrawingToolShortcuts(shortcuts)
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
+			onClose()
+		}
+
+		const onClose = () => {
+			props.closeDialog()
+		}
+
+		return {
+			drawingTools,
+			selectedTool,
+			shortcutChanged,
+			infoAbout,
+			sortBy,
+			onSave,
+			onClose
+		}
 	}
-
-	infoAbout(tool: any) {
-		this.selectedTool =
-			this.drawingTools.find((item) => item.tool === tool) || {}
-	}
-
-	updateDuplicates() {
-		const { drawingTools: tools } = this
-		// find duplicates
-		const duplicates: Record<string, number[]> = tools.reduce(
-			(acc: any, item, index) => {
-				item.duplicate = false // clear duplicates
-				if (!item.shortcut) return acc
-				acc[item.shortcut] = (acc[item.shortcut] || []).concat(index)
-				return acc
-			},
-			{}
-		)
-
-		// mark duplicates
-		// eslint-disable-next-line
-		Object.entries(duplicates).forEach(([shortcut, indexes]) => {
-			if (indexes.length > 1) {
-				indexes.forEach((index) => {
-					tools[index].duplicate = true
-				})
-			}
-		})
-	}
-
-	sortBy(field: string) {
-		this.drawingTools.sort((a: any, b: any) => {
-			const x1 = a[field]
-			const x2 = b[field]
-			if (!x1 && x2) return 1
-			if (!x2 && x1) return -1
-			return x1 > x2 ? 1 : -1
-		})
-	}
-
-	onSave() {
-		const shortcuts = this.drawingTools
-			.filter((item) => item.shortcut)
-			.reduce((acc: any, item) => {
-				acc[item.tool] = item.shortcut
-				return acc
-			}, {})
-
-		this.setDrawingToolShortcuts(shortcuts)
-		this.onClose()
-	}
-
-	onClose() {
-		this.closeDialog()
-	}
-}
+})
 </script>
 
 <style lang="scss" scoped>
