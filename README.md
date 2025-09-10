@@ -14,7 +14,7 @@
 
 ## Overview
 
-The ChartIQ Vue application is a toolkit of components that enable you to build charting applications in the Vue 2 framework. The components include everything from a basic chart to a complex, active trader desktop:
+The ChartIQ Vue application is a toolkit of components that enable you to build charting applications in the Vue 3.5 framework. The components include everything from a basic chart to a complex, active trader desktop:
 
 - `AdvancedChartComponent` &mdash; Creates a full-featured chart with a fully developed user interface
 - `CustomChartComponent` &mdash; Integrates native Vue components with ChartIQ W3C-standard web components
