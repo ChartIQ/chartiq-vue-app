@@ -41,9 +41,6 @@ import 'chartiq/js/extras/svgcharts/piechart.js'
 // Important Note. Uncomment the corresponding configuration object below when enabling this plugin.
 // import 'chartiq/plugins/activetrader/cryptoiq'
 
-// ScriptIQ
-// import 'chartiq/plugins/scriptiq/scriptiq'
-
 // SignalIQ
 import 'chartiq/plugins/signaliq/signaliqDialog'
 import 'chartiq/plugins/signaliq/signaliq-marker'
@@ -66,10 +63,6 @@ import 'chartiq/plugins/studybrowser'
 
 // Trading Central: Technical Views
 // import 'chartiq/plugins/technicalviews/components'
-
-// Visual Earnings
-// Important Note. Uncomment the corresponding configuration object below when enabling this plugin.
-// import 'chartiq/plugins/visualearnings/visualearnings'
 
 // Uncomment the following for the L2 simulator (required for the crypto sample and MarketDepth addOn)
 // import 'chartiq/examples/feeds/L2_simulator' /* for use with cryptoiq */
@@ -130,8 +123,7 @@ function getCustomConfig({
 		technicalInsights,
 		technicalViews,
 		tfc,
-		timeSpanEventPanel,
-		visualEarnings
+		timeSpanEventPanel
 		/* eslint-enable */
 	} = config.plugins
 	config.plugins = {
@@ -141,8 +133,7 @@ function getCustomConfig({
 		// marketDepth,
 		signalIQ,
 		studyBrowser
-		// timeSpanEventPanel,
-		// visualEarnings
+		// timeSpanEventPanel
 		// technicalViews: {
 		//	container: "",
 		//	moduleName: "",

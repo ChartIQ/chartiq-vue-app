@@ -45,9 +45,6 @@ import getDefaultConfig from 'chartiq/js/defaultConfiguration'
 // Crypto, L2 Heat Map, Market Depth,
 // import 'chartiq/plugins/activetrader/cryptoiq'
 
-// ScriptIQ
-// import 'chartiq/plugins/scriptiq/scriptiq'
-
 // SignalIQ
 import 'chartiq/plugins/signaliq/signaliqDialog'
 import 'chartiq/plugins/signaliq/signaliq-marker'
@@ -68,9 +65,6 @@ import 'chartiq/plugins/tfc/tfc-demo' /* if using demo account class */
 
 // Trading Central: Technical Views
 // import 'chartiq/plugins/technicalviews/components'
-
-// Visual Earnings
-// import 'chartiq/plugins/visualearnings/visualearnings'
 
 //  Uncomment the following for the L2 simulator (required for the crypto sample and MarketDepth addOn)
 // import 'chartiq/examples/feeds/L2_simulator' /* for use with cryptoiq */
@@ -99,8 +93,7 @@ function getConfig() {
 		signalIQ,
 		technicalInsights,
 		tfc,
-		timeSpanEventPanel,
-		visualEarnings
+		timeSpanEventPanel
 		/* eslint-enable */
 	} = config.plugins
 	config.plugins = {
@@ -134,8 +127,7 @@ function getConfig() {
 		// 	// }
 		// },
 		// tfc,
-		// timeSpanEventPanel,
-		// visualEarnings
+		// timeSpanEventPanel
 		signalIQ
 	}
 

@@ -26,7 +26,7 @@ The ChartIQ Vue application is a toolkit of components that enable you to build 
 
 ## Requirements
 
-- A copy of the ChartIQ JavaScript library (works best with version 9.9.0).
+- A copy of the ChartIQ JavaScript library (works best with version 10.1.0).
   - If you do not have a copy of the library or need a different version, please contact your account manager or visit our <a href="https://pages.marketintelligence.spglobal.com/ChartIQ-Follow-up-Request.html" target="_blank">Request Follow-Up Site</a>.
 
 ## Getting started

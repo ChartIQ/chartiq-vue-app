@@ -36,6 +36,11 @@ declare namespace CIQ {
 		updateData(data: any, mode?: string): this
 		destroy(soft?: boolean): void
 	}
+	class NameValueStore {
+		constructor()
+		get(name: string, cb: (err: unknown, value?: unknown) => void): void
+		set(name: string, value: unknown, cb: (err: unknown) => void): void
+	}
 
 	function loadScript(url: string, callback: () => void): void
 	function extend(target: any, source: any): void
