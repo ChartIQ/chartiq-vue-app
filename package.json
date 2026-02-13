@@ -1,7 +1,6 @@
 {
 	"name": "chartiq-vue-app",
-	"version": "9.9.0",
-	"chartiqVersion": "9.9.0",
+	"version": "10.1.0",
 	"private": true,
 	"scripts": {
 		"start": "vue-cli-service serve",
@@ -13,15 +12,15 @@
 		"core-js": "^3.35.1",
 		"standard": "^16.0.4",
 		"vue": "^3.5.13",
-		"vue-router": "^4.3.0"
+		"vue-router": "^4.6.4"
 	},
 	"chartiq-dependencies-for-npm": {
-		"@chartiq/active-trader": "^9.6.0",
-		"@chartiq/core": "^9.6.0",
-		"@chartiq/technical-analysis": "^9.6.0",
-		"@chartiq/web-components": "^9.6.0",
-		"@chartiq/chart2music": "^9.8.0",
-		"@chartiq/visual-earnings": "^9.8.0"
+		"@chartiq/active-trader": "~10.1.0",
+		"@chartiq/core": "~10.1.0",
+		"@chartiq/technical-analysis": "~10.1.0",
+		"@chartiq/web-components": "~10.1.0",
+		"@chartiq/chart2music": "~10.1.0",
+		"@chartiq/visual-earnings": "~10.1.0"
 	},
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "^6.19.1",
@@ -48,5 +47,19 @@
 		"> 1%",
 		"last 2 versions",
 		"not dead"
-	]
+	],
+	"overrides": {
+		"@babel/helpers": "^7.26.10",
+		"@babel/runtime": "^7.26.10",
+		"brace-expansion": "^2.0.2",
+		"cross-spawn": "^7.0.6",
+		"http-proxy-middleware": "^3.0.3",
+		"js-yaml": "^4.1.1",
+		"lodash": "^4.17.22",
+		"node-forge": "^1.4.0",
+		"on-headers": "^1.1.0",
+		"postcss": "^8.4.31",
+		"qs": "^6.14.1",
+		"webpack-dev-server": "^5.2.1"
+	}
 }

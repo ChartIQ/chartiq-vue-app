@@ -529,14 +529,15 @@ export default defineComponent({
 
 		onMounted(() => {
 			const config = props.config
-			config.chartId = props.chartId
-			config.initialSymbol = props.symbol || {
-				symbol: 'AAPL',
-				name: 'Apple Inc',
-				exchDisp: 'NASDAQ'
+			if (config) {
+				config.chartId = props.chartId
+				config.initialSymbol = props.symbol || {
+					symbol: 'AAPL',
+					name: 'Apple Inc',
+					exchDisp: 'NASDAQ'
+				}
+				createChartAndUI(config)
 			}
-
-			createChartAndUI(config)
 		})
 
 		onBeforeUnmount(() => {
