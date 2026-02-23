@@ -19,8 +19,7 @@
 		"@chartiq/core": "~10.1.0",
 		"@chartiq/technical-analysis": "~10.1.0",
 		"@chartiq/web-components": "~10.1.0",
-		"@chartiq/chart2music": "~10.1.0",
-		"@chartiq/visual-earnings": "~10.1.0"
+		"@chartiq/chart2music": "~10.1.0"
 	},
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "^6.19.1",
